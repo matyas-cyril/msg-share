@@ -141,6 +141,7 @@ services:
         ipv4_address: 172.0.10.20
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - postgres_data:/var/lib/postgresql/data
 
   roundcube:
     container_name: roundcube_webmail
@@ -183,6 +184,7 @@ services:
       msg_share_bridge:
         ipv4_address: 172.0.10.12
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - ./Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
 
@@ -225,6 +227,7 @@ configs:
         include './adminer.php';
 
 volumes:
+  postgres_data: {}
   prometheus_data: {}
 
 networks:
