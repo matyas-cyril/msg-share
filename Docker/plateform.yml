@@ -1,0 +1,198 @@
+name: msg-share
+
+services:
+
+  murder:
+    container_name: cyrus_murder
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: mup
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.50
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  frontend_01:
+    container_name: cyrus_frontend_01
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: frontend01  
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - ${EXT_IMAP_ORG:-21143}:143
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.51
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  frontend_02:
+    container_name: cyrus_frontend_02
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: frontend02  
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.52
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  backend_01:
+    container_name: cyrus_backend_01
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: backend01  
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.61
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  backend_02:
+    container_name: cyrus_backend_02
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: backend02
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.62
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  save_backend_01:
+    container_name: cyrus_save_backend_01
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: save.backend01
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.71
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  save_backend_02:
+    container_name: cyrus_save_backend_02
+    build:
+      context: ./Cyrus
+      dockerfile: Dockerfile
+    hostname: save.backend02
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.72
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  smtp_postfix:
+    container_name: smtp_postfix_01
+    build:
+      context: ./Postfix
+      dockerfile: Dockerfile
+    hostname: smtp-postfix
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    ports:
+      - ${EXT_SMTP:-20025}:25
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.30
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  postgres:
+    container_name: postgres_17.6
+    image: postgres:17.6-alpine3.22
+    restart: unless-stopped
+    hostname: posgres
+    # set shared memory limit pour l'utilisation Docker
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: messageries_root
+      POSTGRES_PASSWORD: PasswordBdd
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.20
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  roundcube:
+    container_name: roundcube_webmail
+    image: roundcube/roundcubemail:1.6.11-apache  
+    restart: unless-stopped
+    hostname: roundcube
+    ports:
+      - ${EXT_WEBMAIL:-20080}:80
+    environment:
+      - ROUNDCUBEMAIL_DB_TYPE=pgsql
+      - ROUNDCUBEMAIL_DB_HOST=posgres
+      - ROUNDCUBEMAIL_DB_PORT=5432
+      - ROUNDCUBEMAIL_DB_USER=messageries_root
+      - ROUNDCUBEMAIL_DB_PASSWORD=PasswordBdd
+      - ROUNDCUBEMAIL_DB_NAME=roundcube
+      - ROUNDCUBEMAIL_SKIN=elastic
+      - ROUNDCUBEMAIL_DEFAULT_HOST=frontend01
+      - ROUNDCUBEMAIL_DEFAULT_PORT=143
+      - ROUNDCUBEMAIL_SMTP_SERVER=cyrus
+      - ROUNDCUBEMAIL_SMTP_PORT=25
+      - ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE=10M
+      - ROUNDCUBEMAIL_INSTALL_PLUGINS=1
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.10
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./Roundcube/config/config.inc.php:/var/www/html/config/config.inc.php
+    depends_on:
+      - postgres
+
+  adminer:
+    container_name: adminer
+    image: adminer:5.4.0
+    restart: unless-stopped
+    hostname: adminer
+    ports:
+      - ${EXT_ADMINER:-28080}:8080
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.15
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - postgres
+
+networks:
+
+  msg_share_bridge:
+    name: msg_share_bridge
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "172.0.10.0/24" 
+          gateway: "172.0.10.1"
