@@ -172,6 +172,20 @@ services:
     depends_on:
       - postgres
 
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus:v3.6.0
+    restart: unless-stopped
+    hostname: prometheus
+    ports:
+      - ${EXT_prometheus:-29090}:9090
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.12
+    volumes:
+      - ./Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+
   adminer:
     container_name: adminer
     image: adminer:5.4.0
@@ -210,8 +224,10 @@ configs:
         }
         include './adminer.php';
 
-networks:
+volumes:
+  prometheus_data: {}
 
+networks:
   msg_share_bridge:
     name: msg_share_bridge
     driver: bridge
