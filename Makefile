@@ -42,7 +42,8 @@ endef
 	done
 
 .init_webmail: .waiting_postgres .waiting_webmail
-	@docker exec -i postgres_17.6 psql -U messageries_root -c "CREATE DATABASE roundcube";
+	@docker exec -i postgres_17.6 psql -U messageries_root -t -c "\l" | grep -q roundcube \
+		|| { docker exec -i postgres_17.6 psql -U messageries_root -c "CREATE DATABASE roundcube"; }
 	@docker cp roundcube_webmail:/var/www/html/SQL/postgres.initial.sql /tmp/postgres.initial.sql && \
 	 docker exec -i postgres_17.6 psql -U messageries_root -d roundcube < /tmp/postgres.initial.sql;
 	@rm -f /tmp/postgres.initial.sql;
