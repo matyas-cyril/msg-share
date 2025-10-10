@@ -26,3 +26,10 @@ $ make sample
 # Tout déployer from scratch (deploy, install, demo)
 $ make demo
 ```
+
+## WebUI
+
+``` bash
+# Roundcube
+http://localhost:20080
+```
