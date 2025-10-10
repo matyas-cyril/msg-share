@@ -71,12 +71,24 @@ endef
 	 docker exec -i postgres_17.6 psql -U messageries_root -d roundcube < /tmp/postgres.initial.sql;
 	@rm -f /tmp/postgres.initial.sql;
 
+.install_msg_shared:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-install.yml --tags install
+
+.install_sample:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-sample.yml --tags sample
+
 deploy: .deploy_docker .init_webmail
 	@$(call echo_ok,"[INFO] deploy completed") && exit 0;
 
 destroy: .delete_docker
 	@$(call echo_ok,"[INFO] destroy completed") && exit 0;
 
-install: .install_ansible
+install: .install_ansible .install_msg_shared
 
 clean: .remove_venv
+
+sample: .install_ansible .install_sample
+
+demo: deploy .install_ansible .install_msg_shared .install_sample
