@@ -48,6 +48,10 @@ endef
 	@docker compose -f Docker/plateform.yml down -v --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to remove docker plateform - $?") >&2; exit 1; }
 
+.purge_docker:
+	@docker compose -f Docker/plateform.yml down -v --remove-orphans --rmi all \
+	  || { $(call echo_err,"[ERROR] failed to remove docker plateform - $?") >&2; exit 1; }
+
 .deploy_docker:
 	@docker compose -f Docker/plateform.yml up -d --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to deploy docker plateform") >&2; exit 1; } 
@@ -84,6 +88,9 @@ deploy: .deploy_docker .init_webmail
 
 destroy: .delete_docker
 	@$(call echo_ok,"[INFO] destroy completed") && exit 0;
+
+purge: .purge_docker
+	@$(call echo_ok,"[INFO] purge completed") && exit 0;
 
 install: .install_ansible .install_msg_shared
 

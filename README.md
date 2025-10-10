@@ -15,6 +15,10 @@ $ make deploy
 $ make destroy
 ```
 ``` bash
+# Supprimer la plateforme de messagerie + les images
+$ make purge
+```
+``` bash
 # Installer les recettes Ansible
 $ make install
 ```
