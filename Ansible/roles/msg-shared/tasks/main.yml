@@ -25,3 +25,9 @@
     inventory_hostname | upper is regex("^CYRUS_FRONTEND_\d+$")
   tags:
     - install
+
+- name: "Création des utilisateurs SASL"
+  import_tasks:
+    file: sasl_users.yml
+  tags:
+    - install
