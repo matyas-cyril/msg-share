@@ -7,6 +7,10 @@ YELLOW=\033[33m
 RED=\033[31m
 RESET=\033[0m
 
+PYTHON=python3
+VENV_DIR=venv
+ANSIBLE_VERSION=11.10.0
+
 define echo_ok
 	echo -e "${GREEN}$(1)${RESET}"
 endef
@@ -19,7 +23,26 @@ define echo_err
 	echo -e "${RED}$(1)${RESET}"
 endef
 
-.PHONY: deploy destroy
+.PHONY: deploy destroy install
+
+.make_venv:
+	@if [ ! -d $(VENV_DIR) ] || [ ! -f $(VENV_DIR)/bin/activate ]; then \
+		$(PYTHON) -m venv $(VENV_DIR) \
+			|| { $(call echo_err,"virtual environment failed in '$(VENV_DIR)'"); exit 2; }; \
+		$(call echo_ok,"virtual environment created in '$(VENV_DIR)'"); \
+	else \
+		$(call echo_ok,"virtual environment '$(VENV_DIR)' already exist"); \
+	fi
+
+.remove_venv:
+	@rm -rf $(VENV_DIR) || { $(call echo_err,"failed to remove '$(VENV_DIR)'"); exit 2; }; \
+	$(call echo_ok,"successfully removed '$(VENV_DIR)'");
+
+.install_ansible: .make_venv
+	@$(call echo_ok,"starting install of Ansible $(ANSIBLE_VERSION)");
+	@$(VENV_DIR)/bin/pip3 install ansible==$(ANSIBLE_VERSION) \
+		|| { $(call echo_err,"ansible installation failed"); exit 2; }; \
+	$(call echo_ok,"successfully installed Ansible $(ANSIBLE_VERSION)");
 
 .delete_docker:
 	@docker compose -f Docker/plateform.yml down -v --remove-orphans \
@@ -54,3 +77,6 @@ deploy: .deploy_docker .init_webmail
 destroy: .delete_docker
 	@$(call echo_ok,"[INFO] destroy completed") && exit 0;
 
+install: .install_ansible
+
+clean: .remove_venv
