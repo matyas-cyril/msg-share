@@ -1,0 +1,26 @@
+---
+
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: "Démarrer les services Docker de la plateforme"
+      command: docker compose -f ../Docker/plateform.yml up -d
+      tags:
+        - always
+
+
+- hosts: cyrus_share
+  gather_facts: yes
+
+  tasks:
+    - name: "Ajouter des utilisateurs pour effectuer des tests"
+      block:
+        - include_role:
+            name: msg-shared
+            tasks_from: sample.yml
+          tags:
+            - sample
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'ajout des utilisateurs"
