@@ -28,7 +28,7 @@ define echo_err
 	echo -e "${RED}$(1)${RESET}"
 endef
 
-.PHONY: install construct deploy destroy purge ansible rm-ansible sample demo
+.PHONY: all install construct deploy destroy purge ansible rm-ansible sample demo
 
 .construct_platform:
 	@docker compose -f Docker/plateform.yml up -d --remove-orphans \
@@ -106,11 +106,11 @@ construct: .make_shared_folders .chown_shared_folders .construct_platform .init_
 	@$(call echo_ok,"[INFO] deploy completed") && exit 0;
 
 # Supprimer les containers Docker + dossiers partagés + venv
-destroy: .remove_shared_folders .delete_platform
+destroy: .delete_platform .remove_shared_folders
 	@$(call echo_ok,"[INFO] destroy completed") && exit 0;
 
 # Supprimer TOUTE la plateforme (containers, dossiers partagés, venv, images)
-purge: .remove_shared_folders .remove_venv .purge_platform 
+purge: .purge_platform .remove_shared_folders .remove_venv
 	@$(call echo_ok,"[INFO] purge completed") && exit 0;
 
 # Installer ansible
@@ -127,3 +127,6 @@ sample: .add_sample
 
 # Deployer une architecture + Ansible + utilisateurs pour des tests
 demo: deploy sample
+
+# Action par défaut
+all: construct
