@@ -2,7 +2,43 @@ global:
   scrape_interval: 10s
 
 scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
 
+  - job_name: 'cyrus murder'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['mup:1980']
+    basic_auth:
+      username: 'prometheus'
+      password: 'Prometheus'
+
+  - job_name: 'cyrus frontend01'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['frontend01:1980']
+    basic_auth:
+      username: 'prometheus'
+      password: 'Prometheus'
+
+  - job_name: 'cyrus frontend02'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['frontend02:1980']
+    basic_auth:
+      username: 'prometheus'
+      password: 'Prometheus'
+
+  - job_name: 'cyrus backend01'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['backend01:1980']
+    basic_auth:
+      username: 'prometheus'
+      password: 'Prometheus'
+
+  - job_name: 'cyrus backend02'
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['backend02:1980']
+    basic_auth:
+      username: 'prometheus'
+      password: 'Prometheus'
