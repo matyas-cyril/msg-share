@@ -16,6 +16,7 @@ services:
         ipv4_address: 172.0.10.50
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/murder:/partage
 
   frontend_01:
     container_name: cyrus_frontend_01
@@ -33,6 +34,7 @@ services:
         ipv4_address: 172.0.10.51
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_frontend_01:/partage
 
   frontend_02:
     container_name: cyrus_frontend_02
@@ -48,6 +50,7 @@ services:
         ipv4_address: 172.0.10.52
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_frontend_02:/partage
 
   backend_01:
     container_name: cyrus_backend_01
@@ -63,6 +66,7 @@ services:
         ipv4_address: 172.0.10.61
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_backend_01:/partage
 
   backend_02:
     container_name: cyrus_backend_02
@@ -78,6 +82,7 @@ services:
         ipv4_address: 172.0.10.62
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_backend_02:/partage
 
   save_backend_01:
     container_name: cyrus_save_backend_01
@@ -93,6 +98,7 @@ services:
         ipv4_address: 172.0.10.71
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_save_backend_01:/partage
 
   save_backend_02:
     container_name: cyrus_save_backend_02
@@ -108,6 +114,7 @@ services:
         ipv4_address: 172.0.10.72
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/cyrus_save_backend_02:/partage
 
   smtp_postfix:
     container_name: smtp_postfix_01
@@ -125,6 +132,7 @@ services:
         ipv4_address: 172.0.10.30
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/smtp_postfix_01:/partage
 
   postgres:
     container_name: postgres_17.6
