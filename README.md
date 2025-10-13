@@ -7,33 +7,40 @@ $ sudo apt install make docker-ce docker-ce-cli containerd.io python3-venv
 ## Commandes
 
 ``` bash
-# Déployer une plateforme de messagerie (Docker)
-$ make deploy
+# Construire une plateforme de messagerie (Containers Docker + conf Webmail)
+$ make construct
 ```
 ``` bash
-# Supprimer la plateforme de messagerie 
+# Supprimer la plateforme de messagerie (Containers Docker + volumes, ansible, VENV, dossier partagé)
 $ make destroy
 ```
 ``` bash
-# Supprimer la plateforme de messagerie + les images
+# Supprimer toute la plateforme de messagerie (make destroy) + les images + conf réseau + volumes
 $ make purge
 ```
 ``` bash
-# Installer les recettes Ansible
-$ make install
+# Installer Ansible dans le virtual ENV
+$ make ansible
 ```
 ``` bash
-# Ajouter des utilisateurs pour tester
+# Supprimer Ansible et le VENV
+$ make rm-ansible
+```
+``` bash
+# Ajouter uniquement des utilisateurs pour tester
 $ make sample
 ```
 ``` bash
-# Tout déployer from scratch (deploy, install, demo)
+# Tout déployer from scratch (construc, ansible, + recettes)
+$ make deploy
+```
+``` bash
+# Déployer une solution avec des utilisateurs (deploy + sample)
 $ make demo
 ```
-
 ## WebUI
 
 ``` bash
-# Roundcube
+# Webmail (Roundcube)
 http://localhost:20080
 ```
