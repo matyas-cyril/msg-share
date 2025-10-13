@@ -44,3 +44,7 @@ $ make demo
 # Webmail (Roundcube)
 http://localhost:20080
 ```
+``` bash
+# Prometheus
+http://localhost:20080
+```
