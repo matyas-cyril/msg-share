@@ -1,7 +1,10 @@
 ---
 
-- name: "Ajouter l'utilisateur SASL cyrus"
-  shell: echo -n "Cyrus" | saslpasswd2 -p -c cyrus
+- name: "Ajouter des utilisateurs SASL à l'ensemble des serveurs Cyrus"
+  shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
+  with_items:
+    - { username: 'cyrus', password: 'Cyrus' }
+    - { username: 'prometheus', password: 'Prometheus' }
   tags:
     - install
 
