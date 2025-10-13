@@ -28,7 +28,7 @@ define echo_err
 	echo -e "${RED}$(1)${RESET}"
 endef
 
-.PHONY: all install construct deploy destroy purge ansible rm-ansible sample demo
+.PHONY: all ansible construct deploy destroy purge rm-ansible sample demo
 
 .construct_platform:
 	@docker compose -f Docker/plateform.yml up -d --remove-orphans \
