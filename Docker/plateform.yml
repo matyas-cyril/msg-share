@@ -132,6 +132,22 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./../${EXT_SHARED_DIR:-partage}/:/partage
 
+  proxy-dovecot:
+    container_name: proxy_dovecot
+    build:
+      context: ./Proxy-Dovecot
+      dockerfile: Dockerfile
+    hostname: proxy-dovecot  
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.40
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/:/partage
+
   smtp_postfix:
     container_name: smtp_postfix_01
     build:
