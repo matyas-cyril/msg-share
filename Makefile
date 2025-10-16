@@ -1,14 +1,16 @@
 
+# Version de Ansible
+ANSIBLE_VERSION=10.7.0
+
+# Dossier contenant le Virtual Env
 VENV_DIR=venv
 
 # Nom du répertoire partagé
 SHARED_DIR=partage
 
 ### NE PAS MODIFIER ###
-
 SHELL=/bin/bash
 PYTHON=python3
-ANSIBLE_VERSION=11.10.0
 
 # Seb options
 GREEN=\033[32m

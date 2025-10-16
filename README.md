@@ -46,5 +46,5 @@ http://localhost:20080
 ```
 ``` bash
 # Prometheus
-http://localhost:20080
+http://localhost:29090
 ```
