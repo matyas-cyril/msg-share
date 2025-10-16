@@ -2,20 +2,18 @@
 
 - block:
     - name: "Redémarrer Cyrus-IMAP"
-      systemd:
-        name: cyrus-imapd
-        state: restarted
-        enabled: yes
+      command: /etc/init.d/cyrus-imapd restart
       register: restart_result
+      ignore_errors: yes # Erreurs contrôlées !!!!
   rescue:
     - name: "Vérifier le statut du service"
-      command: systemctl status cyrus-imapd
+      command: /etc/init.d/cyrus-imapd status
       register: service_status
       failed_when: false
   when:
     inventory_hostname | upper is regex("^CYRUS_\S+END_\d+$")
   tags:
-    - sample  
+    - sample
 
 - name: "Ajout des utilisaturs de test pour l'authentification"
   shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
