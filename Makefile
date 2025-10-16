@@ -49,10 +49,10 @@ endef
 	$(call echo_ok,"successfully removed '$(VENV_DIR)'");
 
 .init_webmail: .waiting_postgres .waiting_webmail
-	@docker exec -i postgres_17.6 psql -U messageries_root -t -c "\l" | grep -q roundcube \
-		|| { docker exec -i postgres_17.6 psql -U messageries_root -c "CREATE DATABASE roundcube"; }
+	@docker exec -i postgres psql -U messageries_root -t -c "\l" | grep -q roundcube \
+		|| { docker exec -i postgres psql -U messageries_root -c "CREATE DATABASE roundcube"; }
 	@docker cp roundcube_webmail:/var/www/html/SQL/postgres.initial.sql /tmp/postgres.initial.sql && \
-	 docker exec -i postgres_17.6 psql -U messageries_root -d roundcube < /tmp/postgres.initial.sql;
+	 docker exec -i postgres psql -U messageries_root -d roundcube < /tmp/postgres.initial.sql;
 	@rm -f /tmp/postgres.initial.sql;
 
 .make_shared_folders:
@@ -88,7 +88,7 @@ endef
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-install.yml --tags install
 
 .waiting_postgres:
-	@while ! docker exec postgres_17.6 test -S '/var/run/postgresql/.s.PGSQL.5432'; do \
+	@while ! docker exec postgres test -S '/var/run/postgresql/.s.PGSQL.5432'; do \
 		$(call echo_warn,"[WARN] waiting postgres..."); \
 		sleep 1; \
 	done

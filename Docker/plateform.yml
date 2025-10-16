@@ -135,8 +135,8 @@ services:
       - ./../${EXT_SHARED_DIR:-partage}/smtp_postfix_01:/partage
 
   postgres:
-    container_name: postgres_17.6
-    image: postgres:17.6-alpine3.22
+    container_name: postgres
+    image: postgres:18.0-alpine3.22
     restart: unless-stopped
     hostname: posgres
     # set shared memory limit pour l'utilisation Docker
@@ -178,6 +178,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./Roundcube/config/config.inc.php:/var/www/html/config/config.inc.php
+      - ./Roundcube/plugins/:/var/www/html/plugins/
     depends_on:
       - postgres
 
@@ -198,7 +199,7 @@ services:
 
   adminer:
     container_name: adminer
-    image: adminer:5.4.0
+    image: adminer:5.4.1
     restart: unless-stopped
     hostname: adminer
     ports:
