@@ -1,0 +1,57 @@
+---
+# tasks file for passwd
+- name: "Définir les varaibles utiles à la céation des comptes locaux"
+  set_fact:
+    passwd_file: /etc/dovecot/passwd
+    users:
+    - { user: 'ali', password: 'Ali' }
+    - { user: 'benoit', password: 'Benoit' }
+    - { user: 'cyril', password: 'Cyril' }
+    - { user: 'julien', password: 'Julien' }
+    - { user: 'jessy', password: 'Jessy' }
+    - { user: 'olivier', password: 'Olivier' }
+    - { user: 'pepito', password: 'Pepito' }
+    - { user: 'samy', password: 'Samy' }
+  tags:
+    - install
+
+- name: "Vérifier les utilisateurs et mots de passe fournis"
+  fail:
+    msg: "no user to add in {{ passwd_file }}"
+  when: users is not defined
+  tags:
+    - install
+
+- name: "Supprimer le fichier /etc/dovecot/passwd s'il existe"
+  file:
+    path: "{{ passwd_file }}"
+    state: absent
+  tags:
+    - install
+
+- name: "Création du fichier contenant les utilisateurs locaux"
+  file:
+    path: "{{ passwd_file }}"
+    state: touch
+    owner: root
+    group: dovecot
+    mode: '0640'
+  tags:
+    - install
+
+- name: "Générer le mot de passe"
+  command: doveadm pw -s SHA512-CRYPT -p "{{ item.password }}"
+  loop: "{{ users }}"
+  when: item.user is defined and item.password is defined
+  register: result
+  tags:
+    - install
+
+- name: "Ajouter l'utilisateur et mot de passe au fichier passwd"
+  lineinfile:
+    path: "{{ passwd_file }}"
+    line: "{{ item.item.user }}:{{ item.stdout }}"
+    state: present
+  loop: "{{ result.results }}"
+  tags:
+    - install
