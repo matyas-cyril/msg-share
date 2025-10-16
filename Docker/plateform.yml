@@ -116,6 +116,22 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./../${EXT_SHARED_DIR:-partage}/cyrus_save_backend_02:/partage
 
+  gestion:
+    container_name: srv_gestion
+    build:
+      context: ./Gestion
+      dockerfile: Dockerfile
+    hostname: gestion  
+    restart: unless-stopped
+    cap_add:
+      - SYS_PTRACE
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.100
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./../${EXT_SHARED_DIR:-partage}/:/partage
+
   smtp_postfix:
     container_name: smtp_postfix_01
     build:
@@ -178,7 +194,6 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./Roundcube/config/config.inc.php:/var/www/html/config/config.inc.php
-      - ./Roundcube/plugins/:/var/www/html/plugins/
     depends_on:
       - postgres
 
