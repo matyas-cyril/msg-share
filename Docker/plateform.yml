@@ -133,11 +133,11 @@ services:
       - ./../${EXT_SHARED_DIR:-partage}/:/partage
 
   proxy-dovecot:
-    container_name: proxy_dovecot
+    container_name: proxy_dovecot_01
     build:
       context: ./Proxy-Dovecot
       dockerfile: Dockerfile
-    hostname: proxy-dovecot  
+    hostname: proxy-dovecot01
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
