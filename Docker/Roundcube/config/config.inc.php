@@ -1,7 +1,7 @@
 <?php
     $config['plugins'] = [
         'archive',
-        'ziddownload',
+        'zipdownload',
     ];
     $config['log_driver'] = 'stdout';
     $config['zipdownload_selection'] = true;
