@@ -5,13 +5,13 @@ LABEL autor="matyas-cyril"
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y man-db htop db-util locate gettext-base systemctl
 
-RUN apt-get install -y --no-install-recommends iproute2 netcat-traditional telnet rlwrap \
+RUN apt-get install -y --no-install-recommends iproute2 netcat-traditional telnet rlwrap lsof \
      inetutils-ping dnsutils swaks rlwrap vim vim-common sasl2-bin rsyslog rsyslog-doc
 
 # Installation de Postfix
 RUN echo "postfix postfix/main_mailer_type string 'No configuration'" | debconf-set-selections && \
     apt-get install -y --no-install-recommends postfix postfix-cdb postfix-doc postfix-pcre postfix-lmdb \
-     postfix-mysql postfix-pgsql postfix-ldap postfix-sqlite
+     postfix-mysql postfix-pgsql postfix-ldap postfix-sqlite prometheus-postfix-exporter
 
 RUN apt-get autoremove -y
 
