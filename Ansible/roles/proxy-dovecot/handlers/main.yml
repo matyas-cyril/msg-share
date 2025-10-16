@@ -1,2 +1,7 @@
 ---
 # handlers file for proxy-dovecot
+
+- name: restart_dovecot
+  service:
+    name: dovecot
+    state: restarted

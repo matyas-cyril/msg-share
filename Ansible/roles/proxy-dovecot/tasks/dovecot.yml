@@ -1,0 +1,28 @@
+---
+# tasks file for dovecot
+
+- name: "Générer les fichiers de conf Dovecot"
+  template:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+    backup: no
+  with_items:
+    - { src: 'dovecot.conf', dest: '/etc/dovecot/dovecot.conf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'conf.d/10-auth.conf', dest: '/etc/dovecot/conf.d/10-auth.conf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'conf.d/10-master.conf', dest: '/etc/dovecot/conf.d/10-master.conf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'conf.d/auth-passwdfile.conf.ext', dest: '/etc/dovecot/conf.d/auth-passwdfile.conf.ext', owner: 'root', group: 'root', mode: '0644' }
+  notify:
+    restart_dovecot
+  tags:
+    - always
+
+- name: "Activer Dovecot au démarrage"
+  service:
+    name: dovecot
+    state: started
+    enabled: yes
+  tags:
+    - install
