@@ -27,8 +27,6 @@ services:
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
-    ports:
-      - ${EXT_IMAP_ORG:-21143}:143
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.51
@@ -141,6 +139,8 @@ services:
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
+    ports:
+      - ${EXT_IMAP_ORG:-20143}:143
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.40
@@ -198,7 +198,7 @@ services:
       - ROUNDCUBEMAIL_DB_PASSWORD=PasswordBdd
       - ROUNDCUBEMAIL_DB_NAME=roundcube
       - ROUNDCUBEMAIL_SKIN=elastic
-      - ROUNDCUBEMAIL_DEFAULT_HOST=frontend01
+      - ROUNDCUBEMAIL_DEFAULT_HOST=proxy-dovecot01
       - ROUNDCUBEMAIL_DEFAULT_PORT=143
       - ROUNDCUBEMAIL_SMTP_SERVER=cyrus
       - ROUNDCUBEMAIL_SMTP_PORT=25
