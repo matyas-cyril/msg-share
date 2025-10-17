@@ -15,22 +15,6 @@
   tags:
     - sample
 
-- name: "Ajout des utilisaturs de test pour l'authentification"
-  shell: echo -n "{{ item.password }}" | saslpasswd2 -p -c "{{ item.username }}"
-  with_items:
-    - { username: 'ali', password: 'Ali' }
-    - { username: 'benoit', password: 'Benoit' }
-    - { username: 'cyril', password: 'Cyril' }
-    - { username: 'julien', password: 'Julien' }
-    - { username: 'jessy', password: 'Jessy' }
-    - { username: 'olivier', password: 'Olivier' }
-    - { username: 'pepito', password: 'Pepito' }
-    - { username: 'samy', password: 'Samy' }
-  when:
-    inventory_hostname | upper is regex("^CYRUS_FRONTEND_\d+$")
-  tags:
-    - sample
-
 - name: "Création de mailbox sur le backend 01"
   shell: echo "cm user/{{ item.mailbox }} {{item.partition}}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
