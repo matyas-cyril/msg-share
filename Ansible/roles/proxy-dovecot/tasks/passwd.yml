@@ -40,7 +40,7 @@
     - install
 
 - name: "Générer le mot de passe"
-  command: doveadm pw -s SHA512-CRYPT -p "{{ item.password }}"
+  command: doveadm pw -s SHA512-CRYPT -p {{ item.password }}
   loop: "{{ users }}"
   when: item.user is defined and item.password is defined
   register: result
