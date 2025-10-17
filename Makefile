@@ -132,3 +132,7 @@ demo: deploy sample
 
 # Action par défaut
 all: construct
+
+dovecot:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags install
