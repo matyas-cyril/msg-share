@@ -3,12 +3,21 @@
 # passwd-like file with specified location.
 # <https://doc.dovecot.org/latest/core/config/auth/databases/passwd_file.html>
 
-auth_mechanisms = plain login
-
 
 passdb passwd-file {
-  driver = passwd-file 
-  passwd_file_path = /etc/dovecot/passwd
+    driver = passwd-file
+    mechanisms_filter = PLAIN LOGIN
+    passwd_file_path = /etc/dovecot/passwd
+    auth_username_format=%{user}
+    fields {
+        proxy=y
+        #nopassword=y
+        host=frontend01
+        port=143
+        proxy_mech=PLAIN
+        master=cyrus
+        pass=Cyrus
+  }
 }
 
 #userdb passwd-file {
