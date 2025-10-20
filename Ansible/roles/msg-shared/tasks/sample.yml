@@ -16,52 +16,52 @@
     - sample
 
 - name: "Création de mailbox sur le backend 01"
-  shell: echo "cm user/{{ item.mailbox }} {{item.partition}}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "cm {{ item.dir }}{{ item.mailbox }} {{item.partition}}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
-    - { mailbox: 'bal-org-01', partition: 'org' }
-    - { mailbox: 'bal-org-02', partition: 'org' }
-    - { mailbox: 'ali', partition: 'default' }
-    - { mailbox: 'benoit', partition: 'default' }
-    - { mailbox: 'cyril', partition: 'default' }
-    - { mailbox: 'julien', partition: 'default' }
-    - { mailbox: 'bal-spe-53', partition: 'spe' }
+    - { mailbox: 'bal-org-01', partition: 'org', dir: 'user/' }
+    - { mailbox: 'bal-org-02', partition: 'org', dir: 'user/' }
+    - { mailbox: 'ali', partition: 'default', dir: 'user/' }
+    - { mailbox: 'benoit', partition: 'default', dir: 'user/' }
+    - { mailbox: 'cyril', partition: 'default', dir: 'user/' }
+    - { mailbox: 'julien', partition: 'default', dir: 'user/' }
+    - { mailbox: 'bal-spe-53', partition: 'spe', dir: '' }
   when:
     inventory_hostname | upper is regex("^CYRUS_BACKEND_01$")
   tags:
     - sample   
 
 - name: "Création de mailbox backend 02"
-  shell: echo "cm user/{{ item.mailbox }} {{item.partition}}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "cm {{ item.dir }}{{ item.mailbox }} {{item.partition}}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
-    - { mailbox: 'bal-org-03', partition: 'org' }
-    - { mailbox: 'jessy', partition: 'default' }
-    - { mailbox: 'olivier', partition: 'default' }
-    - { mailbox: 'pepito', partition: 'default' }
-    - { mailbox: 'samy', partition: 'default' }
-    - { mailbox: 'bal-spe-51', partition: 'spe' }
-    - { mailbox: 'bal-spe-52', partition: 'spe' }
+    - { mailbox: 'bal-org-03', partition: 'org', dir: 'user/' }
+    - { mailbox: 'jessy', partition: 'default', dir: 'user/' }
+    - { mailbox: 'olivier', partition: 'default', dir: 'user/' }
+    - { mailbox: 'pepito', partition: 'default', dir: 'user/' }
+    - { mailbox: 'samy', partition: 'default', dir: 'user/' }
+    - { mailbox: 'bal-spe-51', partition: 'spe', dir: '' }
+    - { mailbox: 'bal-spe-52', partition: 'spe', dir: '' }
   when:
     inventory_hostname | upper is regex("^CYRUS_BACKEND_02$")
   tags:
     - sample
 
 - name: "Établir un quota"
-  shell: echo "sq user/{{ item.mailbox }} {{ item.quota }}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "sq {{ item.dir }}{{ item.mailbox }} {{ item.quota }}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
-    - { mailbox: 'ali', quota: 50000 }
-    - { mailbox: 'benoit', quota: 50000 }
-    - { mailbox: 'cyril', quota: 50000 }
-    - { mailbox: 'julien', quota: 50000 }
-    - { mailbox: 'jessy', quota: 50000 }
-    - { mailbox: 'olivier', quota: 50000 }
-    - { mailbox: 'pepito', quota: 50000 }
-    - { mailbox: 'samy', quota: 50000 }
-    - { mailbox: 'bal-org-01', quota: 50000 }
-    - { mailbox: 'bal-org-02', quota: 50000 }
-    - { mailbox: 'bal-org-03', quota: 50000 }
-    - { mailbox: 'bal-spe-51', quota: 50000 }
-    - { mailbox: 'bal-spe-52', quota: 50000 }
-    - { mailbox: 'bal-spe-53', quota: 50000 }
+    - { mailbox: 'ali', quota: 50000, dir: 'user/' }
+    - { mailbox: 'benoit', quota: 50000, dir: 'user/' }
+    - { mailbox: 'cyril', quota: 50000, dir: 'user/' }
+    - { mailbox: 'julien', quota: 50000, dir: 'user/' }
+    - { mailbox: 'jessy', quota: 50000, dir: 'user/' }
+    - { mailbox: 'olivier', quota: 50000, dir: 'user/' }
+    - { mailbox: 'pepito', quota: 50000, dir: 'user/' }
+    - { mailbox: 'samy', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-org-01', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-org-02', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-org-03', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-spe-51', quota: 50000, dir: '' }
+    - { mailbox: 'bal-spe-52', quota: 50000, dir: '' }
+    - { mailbox: 'bal-spe-53', quota: 50000, dir: '' }
   when:
     inventory_hostname | upper is regex("^CYRUS_FRONTEND_01$")
   tags:
@@ -87,7 +87,7 @@
     - sample
 
 - name: "Mettre des droits sur les BAL Spe"
-  shell: echo "sam user/{{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "sam {{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
     - { mailbox: 'bal-spe-51', user: 'cyril', acl: 'all' }
     - { mailbox: 'bal-spe-51', user: 'samy', acl: 'all' }
