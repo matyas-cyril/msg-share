@@ -1,6 +1,6 @@
 ---
 # tasks file for passwd
-- name: "Définir les varaibles utiles à la céation des comptes locaux"
+- name: "Définir les variables utiles à la céation des comptes locaux"
   set_fact:
     passwd_file: /etc/dovecot/passwd
     users:
