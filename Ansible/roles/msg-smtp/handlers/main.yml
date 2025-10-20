@@ -1,2 +1,6 @@
 ---
 # handlers file for msg-smtp
+- name: restart_postfix
+  service:
+    name: postfix
+    state: restarted
