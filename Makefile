@@ -87,6 +87,10 @@ endef
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-install.yml --tags install
 
+.install_dovecot:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags install
+
 .waiting_postgres:
 	@while ! docker exec postgres test -S '/var/run/postgresql/.s.PGSQL.5432'; do \
 		$(call echo_warn,"[WARN] waiting postgres..."); \
@@ -99,9 +103,13 @@ endef
 		sleep 1; \
 	done
 
-.add_sample:
+.add_msg_sample:
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-sample.yml --tags sample
+
+.add_login_sample:
+	ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags sample
 
 # Contruire la plateforme docker + deploiement Webmail
 construct: .make_shared_folders .chown_shared_folders .construct_platform .init_webmail
@@ -122,10 +130,10 @@ ansible: .install_ansible
 rm-ansible: .remove_venv
 
 # Deployer une architecture from sratch sans données
-deploy: construct ansible .deploy_msg_shared
+deploy: construct ansible .deploy_msg_shared .install_dovecot
 
 # Ajouter des données pour les tests
-sample: .add_sample
+sample: .add_msg_sample .add_login_sample
 
 # Deployer une architecture + Ansible + utilisateurs pour des tests
 demo: deploy sample
@@ -133,6 +141,4 @@ demo: deploy sample
 # Action par défaut
 all: construct
 
-dovecot:
-	ANSIBLE_CONFIG=Ansible/ansible.cfg \
-	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags install
+dovecot: .install_dovecot
