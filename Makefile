@@ -30,18 +30,39 @@ define echo_err
 	echo -e "${RED}$(1)${RESET}"
 endef
 
+# Charger le fichier dot.env
+ifneq ("$(wildcard dot.env)","")
+    include dot.env
+endif
+
 .PHONY: all ansible construct deploy destroy purge rm-ansible sample demo
 
-.construct_platform:
-	@docker compose -f Docker/plateform.yml up -d --remove-orphans \
+.env.dot:
+	@if [ ! -f "dot.env" ]; then touch dot.env; fi
+	@if [ -d "./sources" ] && [ -n "$(COPY_SRC_CMD)" ] && [ -n "$(COPY_GPG_CMD)" ]; then \
+		for dir in Cyrus Gestion Postfix Proxy-Dovecot; do \
+			cp -rf ./sources/ "./Docker/$$dir/sources"; \
+			sed -e "s|\#\ \%COPY_GPG_CMD\%|$(COPY_GPG_CMD)|g" ./Docker/$$dir/Dockerfile.template | sed -e "s|\#\ \%COPY_SRC_CMD\%|$(COPY_SRC_CMD)|g" - > "./Docker/$$dir/Dockerfile"; \
+		done \
+	else \
+		for dir in Cyrus Gestion Postfix Proxy-Dovecot; do \
+			sed "\|\#\ \%COPY_GPG_CMD\%|d" ./Docker/$$dir/Dockerfile.template | sed "\|\#\ \%COPY_SRC_CMD\%|d" - > "./Docker/$$dir/Dockerfile"; \
+			rm -rf "./Docker/$$dir/sources"; \
+		done \
+	fi
+	
+dot: .env.dot
+
+.construct_platform: .env.dot
+	@docker compose -f Docker/plateform.yml --env-file dot.env up -d --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker plateform") >&2; exit 1; }
 
-.delete_platform:
-	@docker compose -f Docker/plateform.yml down -v --remove-orphans \
+.delete_platform: 
+	@docker compose -f Docker/plateform.yml --env-file dot.env down -v --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to remove plateform - $?") >&2; exit 1; }
 
 .purge_platform:
-	@docker compose -f Docker/plateform.yml down -v --remove-orphans --rmi all \
+	@docker compose -f Docker/plateform.yml --env-file dot.env down -v --remove-orphans --rmi all \
 	  || { $(call echo_err,"[ERROR] failed to purge plateform - $?") >&2; exit 1; }
 
 .remove_venv:
