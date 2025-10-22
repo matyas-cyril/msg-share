@@ -1,0 +1,83 @@
+dn: ou=people,dc=example,dc=com
+objectClass: organizationalUnit
+ou: people
+
+dn: uid=ali,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: ali
+cn: Ali Baba
+sn: Baba
+mail: ali.baba@example.com
+description: Ali
+userPassword: ali
+
+dn: uid=benoit,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: benoit
+cn: Benoit Sanchez
+sn: Sanchez
+mail: benoit.sanchez@example.com
+description: Benoit
+userPassword: benoit
+
+dn: uid=cyril,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: cyril
+cn: Cyril SM
+sn: SM
+mail: cyril.sm@example.com
+description: Cyril
+userPassword: cyril
+
+dn: uid=julien,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: julien
+cn: Julien Fit
+sn: Fit
+mail: julien.fit@example.com
+description: julien
+userPassword: julien
+
+dn: uid=jessy,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: jessy
+cn: Jessy Montoya
+sn: Montoya
+mail: jessy.montoya@example.com
+description: Jessy
+userPassword: jessy
+
+dn: uid=olivier,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: olivier
+cn: Olivier Ce
+sn: Ce
+mail: olivier.ce@example.com
+description: Olivier
+userPassword: olivier
+
+dn: uid=pepito,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: pepito
+cn: Pepito Bon
+sn: Bon
+mail: pepito.bon@example.com
+description: Pepito
+userPassword: pepito
+
+dn: uid=samy,ou=people,dc=example,dc=com
+objectClass: inetOrgPerson
+objectClass: top
+uid: samy
+cn: Samy Scoob
+sn: Scoob
+mail: samy.scoob@example.com
+description: Samy
+userPassword: samy

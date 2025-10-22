@@ -1,0 +1,4 @@
+---
+# vars file for ldap
+ldap_admin_dn: "cn=admin,dc=example,dc=com"
+ldap_admin_password: "adminpassword"

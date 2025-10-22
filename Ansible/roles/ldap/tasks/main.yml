@@ -1,0 +1,7 @@
+---
+# tasks file for ldap
+- name: "Installation openLDAP"
+  import_tasks:
+    file: install.yml
+  tags:
+  - install

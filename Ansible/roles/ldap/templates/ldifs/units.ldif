@@ -1,0 +1,17 @@
+dn: ou=units, dc=example, dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: units
+
+dn: ou=ORG, ou=units, dc=example, dc=com
+objectClass: organizationalUnit
+objectClass: top
+ou: ORG
+
+dn: uid=testunit, ou=ORG, ou=units, dc=example, dc=com
+objectClass: top
+objectClass: inetOrgPerson
+uid: testunit
+cn: mabalorg
+mail: mabalorg@example.com
+sn: mabalorg
