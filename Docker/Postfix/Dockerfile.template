@@ -1,6 +1,12 @@
-FROM debian:13.1-slim
+
+ARG PRIVATE_REGISTRY=""
+
+FROM ${PRIVATE_REGISTRY}debian:13.1-slim
 
 LABEL autor="matyas-cyril"
+
+# %COPY_SRC_CMD%
+# %COPY_GPG_CMD%
 
 RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y man-db htop db-util locate gettext-base systemctl

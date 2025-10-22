@@ -7,6 +7,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: mup
     restart: unless-stopped
     cap_add:
@@ -23,12 +25,12 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: frontend01  
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
-    ports:
-      - ${EXT_IMAP_ORG:-21143}:143
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.51
@@ -41,6 +43,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: frontend02  
     restart: unless-stopped
     cap_add:
@@ -57,6 +61,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: backend01  
     restart: unless-stopped
     cap_add:
@@ -73,6 +79,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: backend02
     restart: unless-stopped
     cap_add:
@@ -89,6 +97,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: save.backend01
     restart: unless-stopped
     cap_add:
@@ -105,6 +115,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: save.backend02
     restart: unless-stopped
     cap_add:
@@ -121,6 +133,8 @@ services:
     build:
       context: ./Gestion
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: gestion  
     restart: unless-stopped
     cap_add:
@@ -137,10 +151,14 @@ services:
     build:
       context: ./Proxy-Dovecot
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: proxy-dovecot01
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
+    ports:
+      - ${EXT_IMAP_ORG:-20143}:143
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.40
@@ -153,6 +171,8 @@ services:
     build:
       context: ./Postfix
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: smtp-postfix
     restart: unless-stopped
     cap_add:
@@ -168,7 +188,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:18.0-alpine3.22
+    image: ${PRIVATE_REGISTRY:-}postgres:18.0-alpine3.22
     restart: unless-stopped
     hostname: posgres
     # set shared memory limit pour l'utilisation Docker
@@ -185,9 +205,7 @@ services:
 
   roundcube:
     container_name: roundcube_webmail
-    build:
-      context: ./Roundcube
-      dockerfile: Dockerfile
+    image: ${PRIVATE_REGISTRY:-}roundcube/roundcubemail:1.6.11-apache  
     restart: unless-stopped
     hostname: roundcube
     extra_hosts:
@@ -203,7 +221,7 @@ services:
       - ROUNDCUBEMAIL_DB_PASSWORD=PasswordBdd
       - ROUNDCUBEMAIL_DB_NAME=roundcube
       - ROUNDCUBEMAIL_SKIN=elastic
-      - ROUNDCUBEMAIL_DEFAULT_HOST=frontend01
+      - ROUNDCUBEMAIL_DEFAULT_HOST=proxy-dovecot01
       - ROUNDCUBEMAIL_DEFAULT_PORT=143
       - ROUNDCUBEMAIL_SMTP_SERVER=cyrus
       - ROUNDCUBEMAIL_SMTP_PORT=25
@@ -220,7 +238,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3.6.0
+    image: ${PRIVATE_REGISTRY:-}prom/prometheus:v3.6.0
     restart: unless-stopped
     hostname: prometheus
     ports:
@@ -235,14 +253,14 @@ services:
 
   adminer:
     container_name: adminer
-    image: adminer:5.4.1
+    image: ${PRIVATE_REGISTRY:-}adminer:5.4.1
     restart: unless-stopped
     hostname: adminer
     ports:
       - ${EXT_ADMINER:-28080}:8080
     environment:
       - ADMINER_DEFAULT_DRIVER=pgsql
-      - ADMINER_DEFAULT_SERVER=posgres
+      - ADMINER_DEFAULT_SERVER=postgres
       - ADMINER_DEFAULT_USERNAME=messageries_root
       - ADMINER_DEFAULT_PASSWORD=PasswordBdd
     networks:
@@ -252,10 +270,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - postgres
-    configs:
-      - source: adminer-index.php
-        target: /var/www/html/index.php
-        mode: 0755
+#    configs:
+#      - source: adminer-index.php
+#        target: /var/www/html/index.php
+#        mode: 0755
 
   ldap:
     container_name: ldap_server

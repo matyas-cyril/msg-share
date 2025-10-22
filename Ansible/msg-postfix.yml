@@ -9,16 +9,16 @@
       tags:
         - always
 
-- hosts: cyrus_share
+- hosts: smtp_postfix
   gather_facts: yes
 
   tasks:
-    - name: "Installer Cyrus / Postfix - Messagerie partagée"
+    - name: "Installer proxy SMTP"
       block:
         - include_role:
-            name: msg-shared
+            name: msg-smtp
           tags:
             - install
       rescue:
         - debug:
-            msg: "Erreur lors de l'installation de la Messagerie partagée"
+            msg: "Erreur lors de l'installation du proxy SMTP"

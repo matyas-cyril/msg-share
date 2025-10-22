@@ -11,6 +11,7 @@
   with_items:
     - { src: 'murder/postfix/main.conf', dest: '/etc/postfix/main.cf', owner: 'root', group: 'root', mode: '0644' }
     - { src: 'murder/postfix/master.conf', dest: '/etc/postfix/master.cf', owner: 'root', group: 'root', mode: '0644' }
+    - { src: 'domains.list', dest: '/etc/postfix/domains.list', owner: 'root', group: 'root', mode: '0644' }
   notify:
     restart_postfix
   
