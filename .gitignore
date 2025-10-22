@@ -1,3 +1,6 @@
 /venv/
 /.env
 /partage/
+dot.env
+sources
+Docker/*/Dockerfile
