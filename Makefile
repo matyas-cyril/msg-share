@@ -150,8 +150,8 @@ ansible: .install_ansible
 # Supprimer ansible
 rm-ansible: .remove_venv
 
-# Deployer une architecture from sratch sans données
-deploy: construct ansible .deploy_msg_shared .install_dovecot
+# Deployer une architecture from scratch  avec le LDAP et Dovecot
+deploy: construct ansible .deploy_msg_shared .ldap.ansible .install_dovecot
 
 # Ajouter des données pour les tests
 sample: .add_msg_sample .add_login_sample
