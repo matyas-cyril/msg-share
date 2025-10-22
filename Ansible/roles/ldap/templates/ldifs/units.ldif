@@ -13,5 +13,5 @@ objectClass: top
 objectClass: inetOrgPerson
 uid: testunit
 cn: mabalorg
-mail: mabalorg@example.com
+mail: mabalorg@email.test
 sn: mabalorg

@@ -8,7 +8,7 @@ objectClass: top
 uid: ali
 cn: Ali Baba
 sn: Baba
-mail: ali.baba@example.com
+mail: ali@email.test
 description: Ali
 userPassword: ali
 
@@ -18,7 +18,7 @@ objectClass: top
 uid: benoit
 cn: Benoit Sanchez
 sn: Sanchez
-mail: benoit.sanchez@example.com
+mail: benoit@email.test
 description: Benoit
 userPassword: benoit
 
@@ -28,7 +28,7 @@ objectClass: top
 uid: cyril
 cn: Cyril SM
 sn: SM
-mail: cyril.sm@example.com
+mail: cyril@email.test
 description: Cyril
 userPassword: cyril
 
@@ -38,7 +38,7 @@ objectClass: top
 uid: julien
 cn: Julien Fit
 sn: Fit
-mail: julien.fit@example.com
+mail: julien@email.test
 description: julien
 userPassword: julien
 
@@ -48,7 +48,7 @@ objectClass: top
 uid: jessy
 cn: Jessy Montoya
 sn: Montoya
-mail: jessy.montoya@example.com
+mail: jessy@email.test
 description: Jessy
 userPassword: jessy
 
@@ -58,7 +58,7 @@ objectClass: top
 uid: olivier
 cn: Olivier Ce
 sn: Ce
-mail: olivier.ce@example.com
+mail: olivier@email.test
 description: Olivier
 userPassword: olivier
 
@@ -68,7 +68,7 @@ objectClass: top
 uid: pepito
 cn: Pepito Bon
 sn: Bon
-mail: pepito.bon@example.com
+mail: pepito@email.test
 description: Pepito
 userPassword: pepito
 
@@ -78,6 +78,6 @@ objectClass: top
 uid: samy
 cn: Samy Scoob
 sn: Scoob
-mail: samy.scoob@example.com
+mail: samy@email.test
 description: Samy
 userPassword: samy

@@ -7,6 +7,7 @@
     mode: "{{ item.mode }}"
   with_items:
     # - { source: 'ldifs/base.ldif', destination: '/tmp/base.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
+    ## Base déjà créée par le conteneur LDAP au démarrage
     - { source: 'ldifs/users.ldif', destination: '/tmp/users.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
     - { source: 'ldifs/units.ldif', destination: '/tmp/units.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
 

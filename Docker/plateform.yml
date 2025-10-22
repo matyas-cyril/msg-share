@@ -274,6 +274,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       # - openldap_data:/var/lib/ldap
+      # Problème au relancement du container.
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.17
@@ -300,7 +301,6 @@ services:
       - KC_HTTPS_CERTIFICATE_KEY_FILE=/etc/x509/https/tls.key
     depends_on:
       - postgres
-    #   condition: service_healthy
     volumes:
       - ./certs:/etc/x509/https
       - /etc/localtime:/etc/localtime:ro

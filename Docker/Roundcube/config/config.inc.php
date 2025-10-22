@@ -4,6 +4,8 @@
         'zipdownload',
     ];
     $config['log_driver'] = 'stdout';
+
+    // Pour voir les fails au niveau OAuth
     $config['debug_level'] = 1;
   
     $config['zipdownload_selection'] = true;
@@ -28,7 +30,8 @@
     $config['oauth_identity_fields'] = ['email'];  
     
     // $config['oauth_login_redirect'] = true;
-   
+    // Permet de rediriger directement vers la page de login OAuth
+    
     include(__DIR__ . '/config.docker.inc.php');
 
 
