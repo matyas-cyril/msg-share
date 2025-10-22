@@ -1,0 +1,17 @@
+dn: ou=units,{{ _ldap_base_dn }}
+objectClass: organizationalUnit
+objectClass: top
+ou: units
+
+dn: ou=ORG,ou=units,{{ _ldap_base_dn }}
+objectClass: organizationalUnit
+objectClass: top
+ou: ORG
+
+dn: uid=testunit,ou=ORG,ou=units,{{ _ldap_base_dn }}
+objectClass: top
+objectClass: inetOrgPerson
+uid: testunit
+cn: mabalorg
+mail: mabalorg@email.test
+sn: mabalorg

@@ -12,7 +12,7 @@
 - hosts: ldap_server
   gather_facts: yes
   tasks:
-    - name: "Installer et configurer le serveur LDAP"
+    - name: "Initialiser le LDAP"
       block:
         - include_role:
             name: ldap
@@ -20,4 +20,4 @@
             - install
       rescue:
         - debug:
-            msg: "Erreur lors de l'installation du serveur LDAP"
+            msg: "Erreur lors de l'initialisation du serveur LDAP"

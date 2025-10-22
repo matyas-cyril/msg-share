@@ -1,2 +1,35 @@
 ---
 # tasks file for ldap
+- name: "Copier des fichiers LDIF"
+  template:
+    src: "{{ item.source }}"
+    dest: "{{ item.destination}}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    ## Base déjà créée par le conteneur LDAP au démarrage
+    # - { source: 'ldif/base.ldif', destination: '/tmp/base.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
+    - { source: 'ldif/users.ldif', destination: '/tmp/users.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
+    - { source: 'ldif/sharedmbx.ldif', destination: '/tmp/sharedmbx.ldif', owner: 'openldap', group: 'openldap', mode: '0644' }
+  tags:
+    - install
+
+- name: "Importer les fichiers LDIF dans l'annuaire LDAP"
+  command: "ldapadd -x -D '{{ _ldap_admin_dn }}' -w '{{ _ldap_admin_password }}' -f {{ item }}"
+  with_items:
+    # - /tmp/base.ldif
+    - /tmp/users.ldif
+    - /tmp/sharedmbx.ldif
+  register: ldap_rslt
+  ignore_errors: yes
+  tags:
+    - install
+
+- name: "Afficher l'erreur si différente de 'Already Exist' : code 68"
+  fail:
+    msg: "{{ ldap_rslt.results[item].stderr }}"
+  when: item.rc != 68 and item.rc != 0
+  loop: "{{ ldap_rslt.results }}"
+  tags:
+    - install

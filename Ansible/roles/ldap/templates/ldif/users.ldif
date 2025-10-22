@@ -1,0 +1,83 @@
+dn: ou=people,{{ _ldap_base_dn }}
+objectClass: organizationalUnit
+ou: people
+
+dn: uid=ali,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: ali
+cn: Ali Baba
+sn: Baba
+mail: ali@email.test
+description: Ali
+userPassword: Ali
+
+dn: uid=benoit,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: benoit
+cn: Benoit Sanchez
+sn: Sanchez
+mail: benoit@email.test
+description: Benoit
+userPassword: Benoit
+
+dn: uid=cyril,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: cyril
+cn: Cyril SM
+sn: SM
+mail: cyril@email.test
+description: Cyril
+userPassword: Cyril
+
+dn: uid=julien,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: julien
+cn: Julien Fit
+sn: Fit
+mail: julien@email.test
+description: julien
+userPassword: Julien
+
+dn: uid=jessy,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: jessy
+cn: Jessy Montoya
+sn: Montoya
+mail: jessy@email.test
+description: Jessy
+userPassword: Jessy
+
+dn: uid=olivier,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: olivier
+cn: Olivier Ce
+sn: Ce
+mail: olivier@email.test
+description: Olivier
+userPassword: Olivier
+
+dn: uid=pepito,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: pepito
+cn: Pepito Bon
+sn: Bon
+mail: pepito@email.test
+description: Pepito
+userPassword: Pepito
+
+dn: uid=samy,ou=people,{{ _ldap_base_dn }}
+objectClass: inetOrgPerson
+objectClass: top
+uid: samy
+cn: Samy Scoob
+sn: Scoob
+mail: samy@email.test
+description: Samy
+userPassword: Samy
