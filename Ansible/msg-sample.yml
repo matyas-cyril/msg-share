@@ -5,10 +5,9 @@
 
   tasks:
     - name: "Démarrer les services Docker de la plateforme"
-      command: docker compose -f ../Docker/plateform.yml up -d
+      command: docker compose -f ../Docker/plateform.yml --env-file ../dot.env up -d
       tags:
         - always
-
 
 - hosts: cyrus_share
   gather_facts: yes

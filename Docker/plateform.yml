@@ -7,6 +7,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: mup
     restart: unless-stopped
     cap_add:
@@ -23,6 +25,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: frontend01  
     restart: unless-stopped
     cap_add:
@@ -39,6 +43,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: frontend02  
     restart: unless-stopped
     cap_add:
@@ -55,6 +61,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: backend01  
     restart: unless-stopped
     cap_add:
@@ -71,6 +79,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: backend02
     restart: unless-stopped
     cap_add:
@@ -87,6 +97,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: save.backend01
     restart: unless-stopped
     cap_add:
@@ -103,6 +115,8 @@ services:
     build:
       context: ./Cyrus
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: save.backend02
     restart: unless-stopped
     cap_add:
@@ -119,6 +133,8 @@ services:
     build:
       context: ./Gestion
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: gestion  
     restart: unless-stopped
     cap_add:
@@ -135,6 +151,8 @@ services:
     build:
       context: ./Proxy-Dovecot
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: proxy-dovecot01
     restart: unless-stopped
     cap_add:
@@ -153,6 +171,8 @@ services:
     build:
       context: ./Postfix
       dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: smtp-postfix
     restart: unless-stopped
     cap_add:
@@ -168,7 +188,7 @@ services:
 
   postgres:
     container_name: postgres
-    image: postgres:18.0-alpine3.22
+    image: ${PRIVATE_REGISTRY:-}postgres:18.0-alpine3.22
     restart: unless-stopped
     hostname: posgres
     # set shared memory limit pour l'utilisation Docker
@@ -185,7 +205,7 @@ services:
 
   roundcube:
     container_name: roundcube_webmail
-    image: roundcube/roundcubemail:1.6.11-apache  
+    image: ${PRIVATE_REGISTRY:-}roundcube/roundcubemail:1.6.11-apache  
     restart: unless-stopped
     hostname: roundcube
     ports:
@@ -215,7 +235,7 @@ services:
 
   prometheus:
     container_name: prometheus
-    image: prom/prometheus:v3.6.0
+    image: ${PRIVATE_REGISTRY:-}prom/prometheus:v3.6.0
     restart: unless-stopped
     hostname: prometheus
     ports:
@@ -230,7 +250,7 @@ services:
 
   adminer:
     container_name: adminer
-    image: adminer:5.4.1
+    image: ${PRIVATE_REGISTRY:-}adminer:5.4.1
     restart: unless-stopped
     hostname: adminer
     ports:
@@ -247,10 +267,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - postgres
-    configs:
-      - source: adminer-index.php
-        target: /var/www/html/index.php
-        mode: 0755
+#    configs:
+#      - source: adminer-index.php
+#        target: /var/www/html/index.php
+#        mode: 0755
 
 configs:
   adminer-index.php:
