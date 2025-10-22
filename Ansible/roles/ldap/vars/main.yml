@@ -1,2 +1,5 @@
 ---
 # vars file for ldap
+_ldap_admin_dn: "{{ ldap_admin_dn | string }}"
+_ldap_admin_password: "{{ ldap_admin_password | string }}"
+_ldap_base_dn: "{{ ldap_base_dn | string }}"
