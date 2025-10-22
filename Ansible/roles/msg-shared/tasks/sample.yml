@@ -24,7 +24,7 @@
     - { mailbox: 'benoit', partition: 'default', dir: 'user/' }
     - { mailbox: 'cyril', partition: 'default', dir: 'user/' }
     - { mailbox: 'julien', partition: 'default', dir: 'user/' }
-    - { mailbox: 'bal-spe-53', partition: 'spe', dir: '' }
+    - { mailbox: 'bal-spe-53', partition: 'spe', dir: 'user/' }
   when:
     inventory_hostname | upper is regex("^CYRUS_BACKEND_01$")
   tags:
@@ -38,8 +38,8 @@
     - { mailbox: 'olivier', partition: 'default', dir: 'user/' }
     - { mailbox: 'pepito', partition: 'default', dir: 'user/' }
     - { mailbox: 'samy', partition: 'default', dir: 'user/' }
-    - { mailbox: 'bal-spe-51', partition: 'spe', dir: '' }
-    - { mailbox: 'bal-spe-52', partition: 'spe', dir: '' }
+    - { mailbox: 'bal-spe-51', partition: 'spe', dir: 'user/' }
+    - { mailbox: 'bal-spe-52', partition: 'spe', dir: 'user/' }
   when:
     inventory_hostname | upper is regex("^CYRUS_BACKEND_02$")
   tags:
@@ -59,48 +59,143 @@
     - { mailbox: 'bal-org-01', quota: 50000, dir: 'user/' }
     - { mailbox: 'bal-org-02', quota: 50000, dir: 'user/' }
     - { mailbox: 'bal-org-03', quota: 50000, dir: 'user/' }
-    - { mailbox: 'bal-spe-51', quota: 50000, dir: '' }
-    - { mailbox: 'bal-spe-52', quota: 50000, dir: '' }
-    - { mailbox: 'bal-spe-53', quota: 50000, dir: '' }
+    - { mailbox: 'bal-spe-51', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-spe-52', quota: 50000, dir: 'user/' }
+    - { mailbox: 'bal-spe-53', quota: 50000, dir: 'user/' }
   when:
     inventory_hostname | upper is regex("^CYRUS_FRONTEND_01$")
   tags:
     - sample
 
 - name: "Mettre des droits sur les BAL Org"
-  shell: echo "sam user/{{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "sam {{ item.dir }}{{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
-    - { mailbox: 'bal-org-03', user: 'ali', acl: 'all' }
-    - { mailbox: 'bal-org-03', user: 'pepito', acl: 'all' }
-    - { mailbox: 'bal-org-01', user: 'cyril', acl: 'all' }
-    - { mailbox: 'bal-org-01', user: 'samy', acl: 'all' }
-    - { mailbox: 'bal-org-02', user: 'benoit', acl: 'all' }
-    - { mailbox: 'bal-org-02', user: 'cyril', acl: 'all' }
-    - { mailbox: 'bal-org-02', user: 'olivier', acl: 'all' }
-    - { mailbox: 'bal-org-03', user: 'samy', acl: 'all' }
-    - { mailbox: 'bal-org-03', user: 'olivier', acl: 'all' }    
-    - { mailbox: 'bal-org-03', user: 'jessy', acl: 'all' }  
-    - { mailbox: 'bal-org-03', user: 'julien', acl: 'all' }    
+    - { mailbox: 'bal-org-03', user: 'ali', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-03', user: 'pepito', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-01', user: 'cyril', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-01', user: 'samy', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-02', user: 'benoit', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-02', user: 'cyril', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-02', user: 'olivier', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-03', user: 'samy', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-org-03', user: 'olivier', acl: 'all', dir: 'user/' }    
+    - { mailbox: 'bal-org-03', user: 'jessy', acl: 'all', dir: 'user/' }  
+    - { mailbox: 'bal-org-03', user: 'julien', acl: 'all', dir: 'user/' }    
   when:
     inventory_hostname | upper is regex("^CYRUS_FRONTEND_02$")
   tags:
     - sample
 
 - name: "Mettre des droits sur les BAL Spe"
-  shell: echo "sam {{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
+  shell: echo "sam {{ item.dir }}{{ item.mailbox }} {{ item.user }} {{ item.acl }}" | cyradm -u cyrus --password Cyrus localhost
   with_items:
-    - { mailbox: 'bal-spe-51', user: 'cyril', acl: 'all' }
-    - { mailbox: 'bal-spe-51', user: 'samy', acl: 'all' }
-    - { mailbox: 'bal-spe-52', user: 'benoit', acl: 'all' }
-    - { mailbox: 'bal-spe-52', user: 'cyril', acl: 'all' }
-    - { mailbox: 'bal-spe-52', user: 'olivier', acl: 'all' }
-    - { mailbox: 'bal-spe-53', user: 'samy', acl: 'all' }
-    - { mailbox: 'bal-spe-53', user: 'olivier', acl: 'all' }    
-    - { mailbox: 'bal-spe-53', user: 'jessy', acl: 'all' }  
-    - { mailbox: 'bal-spe-53', user: 'julien', acl: 'all' }
-    - { mailbox: 'bal-spe-52', user: 'ali', acl: 'all' }
-    - { mailbox: 'bal-spe-53', user: 'pepito', acl: 'all' }   
+    - { mailbox: 'bal-spe-51', user: 'cyril', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-51', user: 'samy', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-52', user: 'benoit', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-52', user: 'cyril', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-52', user: 'olivier', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-53', user: 'samy', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-53', user: 'olivier', acl: 'all', dir: 'user/' }    
+    - { mailbox: 'bal-spe-53', user: 'jessy', acl: 'all', dir: 'user/' }  
+    - { mailbox: 'bal-spe-53', user: 'julien', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-52', user: 'ali', acl: 'all', dir: 'user/' }
+    - { mailbox: 'bal-spe-53', user: 'pepito', acl: 'all', dir: 'user/' }   
   when:
     inventory_hostname | upper is regex("^CYRUS_FRONTEND_02$")
   tags:
     - sample
+
+- name: "Supprimer le fichier /etc/postfix/transport_to_mbx s'il existe"
+  file:
+    path: /etc/postfix/transport_to_mbx
+    state: absent
+  when:
+    inventory_hostname | upper is regex("^CYRUS_\S+END_\d+$")
+  tags:
+    - sample
+
+- name: "Créer le fichier /etc/postfix/transport_to_mbx"
+  file:
+    path: /etc/postfix/transport_to_mbx
+    state: touch
+    owner: root
+    group: root
+    mode: '0640'
+  when:
+    inventory_hostname | upper is regex("^CYRUS_\S+END_\d+$")
+  tags:
+    - sample
+
+- name: "Créer le fichier de transport pour les BAL pour les FE"
+  lineinfile:
+    path: /etc/postfix/transport_to_mbx
+    line: "{{ item.mailbox }}@{{ item.dom }}     smtp:[{{ item.srv }}]"
+    state: present
+  with_items:
+  - { mailbox: 'bal-org-01', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'bal-org-02', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'ali', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'benoit', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'cyril', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'julien', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'bal-spe-53', dom: 'email.test', srv: 'backend01' }
+  - { mailbox: 'bal-org-03', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'jessy', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'olivier', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'pepito', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'samy', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'bal-spe-51', dom: 'email.test', srv: 'backend02' }
+  - { mailbox: 'bal-spe-52', dom: 'email.test', srv: 'backend02' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_FRONTEND_\d+$")
+  tags:
+    - sample
+
+- name: "Créer le fichier de transport pour les BAL pour les BE 01"
+  lineinfile:
+    path: /etc/postfix/transport_to_mbx
+    line: "{{ item.mailbox }}@{{ item.dom }}     lmtp:unix:/run/cyrus/socket/lmtp"
+    state: present
+  with_items:
+  - { mailbox: 'bal-org-01', dom: 'email.test' }
+  - { mailbox: 'bal-org-02', dom: 'email.test' }
+  - { mailbox: 'ali', dom: 'email.test' }
+  - { mailbox: 'benoit', dom: 'email.test' }
+  - { mailbox: 'cyril', dom: 'email.test' }
+  - { mailbox: 'julien', dom: 'email.test' }
+  - { mailbox: 'bal-spe-53', dom: 'email.test' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_01$")
+  tags:
+    - sample
+
+- name: "Créer le fichier de transport pour les BAL pour les BE 02"
+  lineinfile:
+    path: /etc/postfix/transport_to_mbx
+    line: "{{ item.mailbox }}@{{ item.dom }}     lmtp:unix:/run/cyrus/socket/lmtp"
+    state: present
+  with_items:
+  - { mailbox: 'bal-spe-53', dom: 'email.test' }
+  - { mailbox: 'bal-org-03', dom: 'email.test' }
+  - { mailbox: 'jessy', dom: 'email.test' }
+  - { mailbox: 'olivier', dom: 'email.test' }
+  - { mailbox: 'pepito', dom: 'email.test' }
+  - { mailbox: 'samy', dom: 'email.test' }
+  - { mailbox: 'bal-spe-51', dom: 'email.test' }
+  - { mailbox: 'bal-spe-52', dom: 'email.test' }
+  when:
+    inventory_hostname | upper is regex("^CYRUS_BACKEND_02$")
+  tags:
+    - sample
+
+- name: "Générer les db, cdb.. des fichiers Postfix modifiés"
+  command: "postmap {{ item.type }}:{{ item.dest }}"
+  when:
+    inventory_hostname | upper is regex("^CYRUS_\S+END_\d+$")
+  with_items:
+    - { dest: '/etc/postfix/transport_to_mbx', type: 'cdb' }
+  notify:
+    restart_postfix
+  tags:
+    - sample
+    
