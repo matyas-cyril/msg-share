@@ -185,9 +185,14 @@ services:
 
   roundcube:
     container_name: roundcube_webmail
-    image: roundcube/roundcubemail:1.6.11-apache  
+    build:
+      context: ./Roundcube
+      dockerfile: Dockerfile
     restart: unless-stopped
     hostname: roundcube
+    extra_hosts:
+      - "keycloak.example.com:172.0.10.19"
+      - "roundcube.example.com:127.0.0.1"
     ports:
       - ${EXT_WEBMAIL:-20080}:80
     environment:
@@ -252,6 +257,61 @@ services:
         target: /var/www/html/index.php
         mode: 0755
 
+  ldap:
+    container_name: ldap_server
+    image: osixia/openldap:stable
+    restart: unless-stopped
+    hostname: ldap
+    environment:
+      - LDAP_ORGANISATION=ExampleOrg
+      - LDAP_DOMAIN=example.com
+      - LDAP_BASE_DN=dc=example,dc=com
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=adminpassword
+    ports:
+      - ${EXT_LDAP:-2389}:389
+      - ${EXT_LDAP_SSL:-2636}:636
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      # - openldap_data:/var/lib/ldap
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.17
+
+  keycloak:
+    container_name: keycloak_server
+    image: keycloak/keycloak:26.4
+    restart: unless-stopped
+    hostname: keycloak
+    extra_hosts:
+      - "roundcube.example.com:172.0.10.10"
+    environment:
+      - KC_HOSTNAME=keycloak.example.com
+      - KC_HOSTNAME_STRICT=false       
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=adminpassword
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=posgres
+      - KC_DB_URL_PORT=5432
+      - KC_DB_USERNAME=messageries_root
+      - KC_DB_PASSWORD=PasswordBdd
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_HTTPS_CERTIFICATE_FILE=/etc/x509/https/tls.crt
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/etc/x509/https/tls.key
+    depends_on:
+      - postgres
+    #   condition: service_healthy
+    volumes:
+      - ./certs:/etc/x509/https
+      - /etc/localtime:/etc/localtime:ro
+    command: start-dev
+    ports:
+      - ${EXT_KEYCLOAK:-38080}:8080
+      - ${EXT_KEYCLOAK_SSL:-8443}:8443
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.19
+
 configs:
   adminer-index.php:
     content: |
@@ -269,6 +329,7 @@ configs:
 volumes:
   postgres_data: {}
   prometheus_data: {}
+  openldap_data: {}
 
 networks:
   msg_share_bridge:
