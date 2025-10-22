@@ -35,7 +35,7 @@ ifneq ("$(wildcard dot.env)","")
     include dot.env
 endif
 
-.PHONY: all ansible construct deploy destroy purge rm-ansible sample demo
+.PHONY: all ansible construct deploy destroy purge rm-ansible sample ldap demo
 
 .env.dot:
 	@if [ ! -f "dot.env" ]; then touch dot.env; fi
@@ -155,6 +155,18 @@ deploy: construct ansible .deploy_msg_shared .install_dovecot
 
 # Ajouter des données pour les tests
 sample: .add_msg_sample .add_login_sample
+
+## LDAP ##
+.ldap.docker:
+	@docker compose -f Docker/plateform.yml --env-file dot.env up ldap -d --remove-orphans \
+	  || { $(call echo_err,"[ERROR] failed to construct docker LDAP plateform") >&2; exit 1; }
+
+.ldap.ansible: .install_ansible
+	@ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	   $(VENV_DIR)/bin/ansible-playbook Ansible/ldap-install.yml --tags install \
+	   || { $(call echo_err,"[ERROR] failed to deploy ansible") >&2; exit 1; }
+
+ldap: .ldap.docker .ldap.ansible
 
 # Deployer une architecture + Ansible + utilisateurs pour des tests
 demo: deploy sample
