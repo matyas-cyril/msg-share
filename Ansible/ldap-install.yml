@@ -1,0 +1,23 @@
+---
+
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: "Démarrer les services Docker de la plateforme LDAP"
+      command: docker compose -f ../Docker/plateform.yml --env-file ../dot.env up ldap -d --remove-orphans
+      tags:
+        - always
+
+- hosts: ldap_server
+  gather_facts: yes
+  tasks:
+    - name: "Installer et configurer le serveur LDAP"
+      block:
+        - include_role:
+            name: ldap
+          tags:
+            - install
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'installation du serveur LDAP"
