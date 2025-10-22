@@ -239,7 +239,7 @@ services:
     restart: unless-stopped
     hostname: prometheus
     ports:
-      - ${EXT_prometheus:-29090}:9090
+      - ${EXT_PROMETHEUS:-29090}:9090
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.12
@@ -247,6 +247,26 @@ services:
       - /etc/localtime:/etc/localtime:ro
       - ./Prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus_data:/prometheus
+
+  ldap:
+    container_name: ldap_server
+    image: osixia/openldap:1.5.0
+    restart: unless-stopped
+    hostname: ldap
+    environment:
+      - LDAP_ORGANISATION=ExampleOrg
+      - LDAP_DOMAIN=example.com
+      - LDAP_BASE_DN=dc=example,dc=com
+      - LDAP_ADMIN_USERNAME=admin
+      - LDAP_ADMIN_PASSWORD=AdminLDAP
+    ports:
+      - ${EXT_LDAP:-20389}:389
+      - ${EXT_LDAP_SSL:-20636}:636
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.17
 
   adminer:
     container_name: adminer
