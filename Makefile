@@ -113,9 +113,17 @@ dot: .env.dot
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags install
 
 .waiting_postgres:
-	@while ! docker exec postgres test -S '/var/run/postgresql/.s.PGSQL.5432'; do \
+	@docker compose -f Docker/plateform.yml --env-file dot.env up postgres -d --remove-orphans \
+	  || { $(call echo_err,"[ERROR] failed to construct docker postgres") >&2; exit 1; }
+	@cpt=0; \
+	while ! docker exec postgres test -S '/var/run/postgresql/.s.PGSQL.5432'; do \
+        if [ $$cpt -ge 10 ]; then \
+            $(call echo_err,"[ERROR] PostgreSQL did not start in time"); \
+            exit 1; \
+        fi; \
 		$(call echo_warn,"[WARN] waiting postgres..."); \
 		sleep 1; \
+		cpt=$$((cpt+1)); \
 	done
 
 .waiting_webmail:
