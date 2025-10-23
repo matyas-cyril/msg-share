@@ -287,7 +287,7 @@ rm_prometheus: .init_dot.env
 	@docker compose -f Docker/plateform.yml --env-file dot.env down prometheus -v --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker prometheus plateform") >&2; exit 1; }
 
-.deploy_plateform: .shared_folders
+.deploy_plateform: .shared_folders .init_certif-keycloak
 	@docker compose -f Docker/plateform.yml --env-file dot.env up -d --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker plateform") >&2; exit 1; }
 
@@ -312,3 +312,33 @@ install: .init_dot.env .deploy_plateform .install_plateform .install_msg_shared
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags sample
 
 demo: install .add_msg_sample .add_login_sample
+	@$(call echo_ok,"[INFO] mode demo deployment completed") && exit 0;
+
+.init_certif-keycloak:
+	@if [ ! -d "./keycloak-certs" ]; then mkdir -p ./keycloak-certs && chmod -R 755 ./keycloak-certs; fi
+	@if [ ! -f "./keycloak-certs/keycloak.key" ] || [ ! -f "./keycloak-certs/keycloak.csr" ] || [ ! -f "./keycloak-certs/keycloak.crt" ]; then \
+		openssl genrsa -out ./keycloak-certs/keycloak.key 2048; \
+		openssl req -new -key ./keycloak-certs/keycloak.key -out ./keycloak-certs/keycloak.csr; \
+		openssl x509 -req -days 36500 -in ./keycloak-certs/keycloak.csr -signkey ./keycloak-certs/keycloak.key -out ./keycloak-certs/keycloak.crt; \
+	fi
+
+.deploy_keycloak: .init_certif-keycloak
+	@docker compose -f Docker/plateform.yml --env-file dot.env up keycloak -d --remove-orphans \
+	  || { $(call echo_err,"[ERROR] failed to construct docker keycloak plateform") >&2; exit 1; }
+
+.init_keycloak: .deploy_keycloak .waiting_postgres
+	@docker exec -i postgres psql -U messageries_root -t -c "\l" | grep -q keycloak \
+		|| { docker exec -i postgres psql -U messageries_root -c "CREATE DATABASE keycloak"; }
+
+keycloak: .init_dot.env .init_keycloak
+	@$(call echo_ok,"[INFO] keycloak deployment completed") && exit 0;
+
+rm_keycloak: .init_dot.env
+	@docker compose -f Docker/plateform.yml --env-file dot.env down keycloak -v --remove-orphans \
+	  || { $(call echo_err,"[ERROR] failed to construct docker keycloak plateform") >&2; exit 1; }
+
+# Générer des certificats pour Keycloak
+certif-keycloak: .init_certif-keycloak
+
+rm_certif-keycloak:
+	@rm -rf ./keycloak-certs
