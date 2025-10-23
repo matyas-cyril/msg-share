@@ -268,6 +268,39 @@ services:
       msg_share_bridge:
         ipv4_address: 172.0.10.17
 
+  keycloak:
+    container_name: keycloak_server
+    image: keycloak/keycloak:26.4
+    restart: unless-stopped
+    hostname: keycloak
+    extra_hosts:
+      - "roundcube.localhost:172.0.10.10"
+    environment:
+      - KC_HOSTNAME=keycloak.localhost
+      - KC_HOSTNAME_STRICT=false       
+      - KC_BOOTSTRAP_ADMIN_USERNAME=admin
+      - KC_BOOTSTRAP_ADMIN_PASSWORD=KeycloakPassword
+      - KC_DB=postgres
+      - KC_DB_URL_HOST=posgres
+      - KC_DB_URL_PORT=5432
+      - KC_DB_USERNAME=messageries_root
+      - KC_DB_PASSWORD=PasswordBdd
+      - KC_DB_URL_DATABASE=keycloak
+      - KC_HTTPS_CERTIFICATE_FILE=/etc/x509/https/keycloak.crt
+      - KC_HTTPS_CERTIFICATE_KEY_FILE=/etc/x509/https/keycloak.key
+    depends_on:
+      - postgres
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ../keycloak-certs:/etc/x509/https
+    command: start-dev
+    ports:
+      - ${EXT_KEYCLOAK:-38080}:8080
+      - ${EXT_KEYCLOAK_SSL:-38443}:8443
+    networks:
+      msg_share_bridge:
+        ipv4_address: 172.0.10.19
+
   adminer:
     container_name: adminer
     image: ${PRIVATE_REGISTRY:-}adminer:5.4.1
