@@ -4,3 +4,4 @@
 dot.env
 sources
 Docker/*/Dockerfile
+/keycloak-certs/
