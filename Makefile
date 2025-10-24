@@ -35,12 +35,10 @@ ifneq ("$(wildcard dot.env)","")
     include dot.env
 endif
 
-.PHONY: all clean purge ansible rm_ansible murder rm_murder frontend rm_frontend backend rm_backend \
+.PHONY: clean purge ansible rm_ansible murder rm_murder frontend rm_frontend backend rm_backend \
         backend-save rm_backend-save smtp rm_smtp dovecot rm_dovecot ldap rm_ldap postgres rm_postgres \
 		webmail rm_webmail gestion rm_gestion adminer rm_adminer prometheus rm_prometheus \
-		deploy install demo keycloak rm_keycloak certif-keycloak rm_certif-keycloak
-
-all: .init_dot.env
+		all demo keycloak rm_keycloak certif-keycloak rm_certif-keycloak
 
 # Supprimer les containers Docker + dossiers partagés + venv
 clean: .init_dot.env .delete_platform .remove_shared_folders .remove_venv
@@ -293,15 +291,13 @@ rm_prometheus: .init_dot.env
 
 .install_plateform: .install_ansible .configure_ldap .install_dovecot
 
-# Déployer et installer LDAP, Dovecot, Webmail, Adminer, Keycloak... sauf tout ce qui est messagerie
-deploy: .init_dot.env .deploy_plateform .install_plateform .init_webmail
-	@$(call echo_ok,"[INFO] deploy completed") && exit 0;
-
 .install_msg_shared:
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-install.yml --tags install
 
-install: .init_dot.env .deploy_plateform .install_plateform .install_msg_shared
+# Déployer et installer LDAP, Dovecot, Webmail, Adminer, Keycloak... sauf tout ce qui est messagerie
+all: .init_dot.env .deploy_plateform .install_plateform .install_msg_shared .init_webmail .init_keycloak
+	@$(call echo_ok,"[INFO] deploy completed") && exit 0;
 
 .add_msg_sample:
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
