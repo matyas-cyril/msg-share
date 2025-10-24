@@ -250,9 +250,12 @@ rm_postgres: .init_dot.env
 	 docker exec -i postgres psql -U messageries_root -d roundcube < /tmp/postgres.initial.sql;
 	@rm -f /tmp/postgres.initial.sql;
 
+.drop_webmail_database:
+	@docker exec -i postgres psql -U messageries_root -c "DROP DATABASE IF EXISTS roundcube"
+
 webmail: .init_dot.env .init_webmail
 
-rm_webmail: .init_dot.env
+rm_webmail: .init_dot.env .drop_webmail_database
 	@docker compose -f Docker/plateform.yml --env-file dot.env down roundcube -v --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to remove roundcube - $?") >&2; exit 1; }
 
