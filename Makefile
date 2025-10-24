@@ -307,7 +307,7 @@ all: .init_dot.env .deploy_plateform .install_plateform .install_msg_shared .ini
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/proxy-dovecot.yml --tags sample
 
-demo: install .add_msg_sample .add_login_sample
+demo: all .add_msg_sample .add_login_sample
 	@$(call echo_ok,"[INFO] mode demo deployment completed") && exit 0;
 
 .init_certif-keycloak:
