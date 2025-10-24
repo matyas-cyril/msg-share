@@ -158,7 +158,8 @@ services:
     cap_add:
       - SYS_PTRACE
     ports:
-      - ${EXT_IMAP_ORG:-20143}:143
+      - ${EXT_IMAP:-20143}:143
+      - ${EXT_IMAPS:-20993}:993
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.40
