@@ -57,7 +57,7 @@ $ make rm_prometheus
 
 ``` bash
 # Webmail (Roundcube)
-http://localhost:20080
+http://roundcube.localhost:20080
 ```
 ``` bash
 # Prometheus
@@ -65,5 +65,5 @@ http://localhost:29090
 ```
 ``` bash
 # Keycloak
-https://localhost:38443
+https://keycloak.localhost:38443
 ```
