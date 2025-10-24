@@ -35,10 +35,10 @@ ifneq ("$(wildcard dot.env)","")
     include dot.env
 endif
 
-.PHONY: all clean purge \
-        postgres rm_postgres webmail rm_webmail ansible rm_ansible ldap rm_ldap \
-        murder rm_murder frontend rm_frontend backend rm_backend backend-save rm_backend-save \
-		smtp rm_smtp
+.PHONY: all clean purge ansible rm_ansible murder rm_murder frontend rm_frontend backend rm_backend \
+        backend-save rm_backend-save smtp rm_smtp dovecot rm_dovecot ldap rm_ldap postgres rm_postgres \
+		webmail rm_webmail gestion rm_gestion adminer rm_adminer prometheus rm_prometheus \
+		deploy install demo keycloak rm_keycloak certif-keycloak rm_certif-keycloak
 
 all: .init_dot.env
 
