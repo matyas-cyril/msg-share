@@ -154,6 +154,8 @@ services:
       args:
         PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: proxy-dovecot01
+    extra_hosts:
+      - "keycloak.example.com:172.0.10.19"
     restart: unless-stopped
     cap_add:
       - SYS_PTRACE
@@ -166,6 +168,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./../${EXT_SHARED_DIR:-partage}/:/partage
+      # Pas secure
+      - ../keycloak-certs:/usr/local/share/ca-certificates
 
   smtp_postfix:
     container_name: smtp_postfix_01
@@ -209,6 +213,8 @@ services:
     image: ${PRIVATE_REGISTRY:-}roundcube/roundcubemail:1.6.11-apache  
     restart: unless-stopped
     hostname: roundcube
+    extra_hosts:
+      - "keycloak.example.com:172.0.10.19"
     ports:
       - ${EXT_WEBMAIL:-20080}:80
     environment:
@@ -231,6 +237,8 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./Roundcube/config/config.inc.php:/var/www/html/config/config.inc.php
+      # Pas secure
+      - ../keycloak-certs:/usr/local/share/ca-certificates
     depends_on:
       - postgres
 
@@ -275,9 +283,9 @@ services:
     restart: unless-stopped
     hostname: keycloak
     extra_hosts:
-      - "roundcube.localhost:172.0.10.10"
+      - "roundcube.example.com:172.0.10.10"
     environment:
-      - KC_HOSTNAME=keycloak.localhost
+      - KC_HOSTNAME=keycloak.example.com
       - KC_HOSTNAME_STRICT=false       
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=KeycloakPassword

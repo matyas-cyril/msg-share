@@ -1,49 +1,31 @@
 auth_mechanisms {
-  xoauth2 = yes
   oauthbearer = yes
+  xoauth2 = yes
 }
 
 oauth2 {
-  tokeninfo_url = https://keycloak/realms/example.com/protocol/openid-connect/token
-  introspection_url = https://keycloak/realms/example.com/protocol/openid-connect/userinfo
-  #force_introspection = yes
-  username_attribute = uid
-}
-
-# with local validation
-oauth2 {
-  introspection_mode = local
+  introspection_mode = post
+  # tokeninfo_url = https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo?tokentoverify=
+  # introspection_url = https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo
+  introspection_url = https://roundcube:S9CC8kyju55sUvIv6g1zaa30eNPyjx0k@keycloak.example.com:8443/realms/example.com/protocol/openid-connect/token/introspect
+  # Pas secure
   username_attribute = email
-  oauth2_local_validation {
-    dict fs {
-      fs posix {
-        prefix = /etc/dovecot/oauth2-keys/
-      }
-    }
-  }
+  active_attribute = active
+  active_value = true
+  # client_id = dovecot
+  # client_secret = mRS9euVEkl1wulsXU3JQPjQHrHPdDTUHa
 }
 
 
-#auth_mechanisms {
-#  xoauth2 = yes
-#  oauthbearer = yes
-#}
-#oauth2 {
-#  tokeninfo_url = https://www.googleapis.com/oauth2/v3/tokeninfo?access_token=
-#  introspection_url = https://www.googleapis.com/oauth2/v2/userinfo
-#  #force_introspection = yes
-#  username_attribute = email
-#}
-
-# with local validation
-#oauth2 {
-#  introspection_mode = local
-#  username_attribute = email
-#  oauth2_local_validation {
-#    dict fs {
-#      fs posix {
-#        prefix = /etc/dovecot/oauth2-keys/
-#      }
-#    }
-#  }
-#}
+passdb static {
+  fields {
+      # user = %{u}
+      proxy=y
+      # nopassword=y
+      host=frontend01
+      port=143
+      proxy_mech=plain
+      master=cyrus
+      pass=Cyrus
+     }
+ }
