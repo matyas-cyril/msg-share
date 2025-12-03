@@ -279,7 +279,11 @@ services:
 
   keycloak:
     container_name: keycloak_server
-    image: keycloak/keycloak:26.4
+    build:
+      context: ./Keycloak
+      dockerfile: Dockerfile
+      args:
+        PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     restart: unless-stopped
     hostname: keycloak
     extra_hosts:

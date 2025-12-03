@@ -7,7 +7,7 @@ oauth2 {
   introspection_mode = post
   # tokeninfo_url = https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo?tokentoverify=
   # introspection_url = https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo
-  introspection_url = https://roundcube:S9CC8kyju55sUvIv6g1zaa30eNPyjx0k@keycloak.example.com:8443/realms/example.com/protocol/openid-connect/token/introspect
+  introspection_url = https://roundcube:AuS9lGlSVBgDcsmqTb5DzjuSJ3Pv8GMP@keycloak.example.com:8443/realms/example.com/protocol/openid-connect/token/introspect
   # Pas secure
   username_attribute = email
   active_attribute = active

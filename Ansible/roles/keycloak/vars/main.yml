@@ -1,0 +1,3 @@
+---
+# vars file for keycloak
+_keycloak_realm_file: "test.json"
