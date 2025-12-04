@@ -3,7 +3,51 @@
 # <https://doc.dovecot.org/latest/core/config/auth/databases/ldap.html>
 
 ## See <https://doc.dovecot.org/latest/core/config/dict.html#ldap>
- 
+
+ldap_uris = {{ ldap_uri }}
+ldap_auth_dn = {{ ldap_admin_dn }} 
+ldap_auth_dn_password = {{ ldap_admin_password }}
+ldap_base = ou=people,{{ ldap_base_dn }}
+
+passdb ldap {
+
+    driver = ldap
+    mechanisms_filter = PLAIN LOGIN
+
+    ldap_filter = (&(objectClass=inetOrgPerson)(uid=%{user}))
+    ldap_bind = yes
+
+    fields {
+        proxy=y
+#        nopassword=y
+        host=frontend01
+        port=143
+        proxy_mech=PLAIN
+        master=cyrus
+        pass=Cyrus
+
+  }
+
+}
+
+
+
+#userdb ldap {
+#    driver = prefetch
+#    fields {
+#        proxy=y
+#        nopassword=y
+#        host=frontend01
+#        port=143
+#        proxy_mech=PLAIN
+#        master=cyrus
+#        pass=Cyrus
+#        login_user=%{ldap:uid}
+#        uid=%{user}
+#  }
+#}
+
+
 #ldap_uris = ldap://localhost
 #ldap_auth_dn = cn=admin 
 #ldap_auth_dn_password = supersecret
