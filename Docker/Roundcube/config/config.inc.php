@@ -78,22 +78,22 @@ $config['oauth_provider_name'] = 'Keycloak';
 $config['oauth_client_id'] = 'roundcube';
 
 // Mandatory: OAuth client secret
-$config['oauth_client_secret'] = 'kt2V6lVxVG49HVXQVXC2o1Mqjp5uplTA';
+$config['oauth_client_secret'] = 'AuS9lGlSVBgDcsmqTb5DzjuSJ3Pv8GMP';
 
 // Mandatory: URI for OAuth user authentication (redirect)
-$config['oauth_auth_uri'] = 'https://keycloak.localhost:38443/realms/example.com/protocol/openid-connect/auth';
+$config['oauth_auth_uri'] = 'https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/auth';
 
 // Mandatory: Endpoint for OAuth authentication requests (server-to-server)
-$config['oauth_token_uri'] = 'https://keycloak.localhost:38443/realms/example.com/protocol/openid-connect/token';
+$config['oauth_token_uri'] = 'https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/token';
 
 // Optional: Endpoint to query user identity if not provided in auth response
-$config['oauth_identity_uri'] = 'https://keycloak.localhost:38443/realms/example.com/protocol/openid-connect/userinfo';
+$config['oauth_identity_uri'] = 'https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo';
 
 // Mandatory: OAuth scopes to request (space-separated string)
 $config['oauth_scope'] = 'openid profile email';
 
 // Optional: array of field names used to resolve the username within the identity information
-$config['oauth_identity_fields'] = ['uid'];
+$config['oauth_identity_fields'] = ['email'];
 
 // provide an URL where a user can get support for this Roundcube installation
 // PLEASE DO NOT LINK TO THE ROUNDCUBE.NET WEBSITE HERE!
@@ -140,8 +140,8 @@ $config['spellcheck_engine'] = 'pspell';
 
 $config['zipdownload_selection'] = true;
 
-$config['oauth_redirect_uri'] = 'http://roundcube.localhost:20080/?_task=login&_action=oauth_callback';
+$config['oauth_redirect_uri'] = 'http://roundcube.example.com:20080/?_task=login&_action=oauth_callback';
 
-$config['oauth_post_logout_redirect'] = 'http://roundcube.localhost:20080/';
+$config['oauth_post_logout_redirect'] = 'http://roundcube.example.com:20080/';
 
 include(__DIR__ . '/config.docker.inc.php');

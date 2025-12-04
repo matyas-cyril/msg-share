@@ -1,0 +1,23 @@
+---
+
+- hosts: localhost
+  gather_facts: no
+
+  tasks:
+    - name: "Démarrer les services Docker Keycloak"
+      command: docker compose -f ../Docker/plateform.yml --env-file ../dot.env up keycloak -d --remove-orphans
+      tags:
+        - always
+
+- hosts: keycloak_server
+  gather_facts: yes
+  tasks:
+    - name: "Initialiser keycloak"
+      block:
+        - include_role:
+            name: keycloak
+          tags:
+            - install
+      rescue:
+        - debug:
+            msg: "Erreur lors de l'initialisation du serveur Keycloak"

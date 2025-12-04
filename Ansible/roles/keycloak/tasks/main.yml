@@ -1,0 +1,23 @@
+---
+# tasks file for keycloak
+- name: "Copie du realm"
+  template:
+    src: "{{ item.source }}"
+    dest: "{{ item.destination}}"
+    owner: "{{ item.owner }}"
+    group: "{{ item.group }}"
+    mode: "{{ item.mode }}"
+  with_items:
+    - { source: 'keycloak-realm/{{ _keycloak_realm_file }}', destination: '/opt/keycloak/data/import/', owner: 'keycloak', group: 'root', mode: '0644' }
+  tags:
+    - install
+
+# - name: "Arrêter Keycloak pour l'import du realm"
+#   command: ""
+#   tags:
+#     - install
+
+- name: "Importer le realm Keycloak" # On peut le faire au startup du docker mais keycloak boucle l'import
+  command: "/opt/keycloak/bin/kc.sh import --file /opt/keycloak/data/import/{{ _keycloak_realm_file }} --override false"
+  tags:
+    - install
