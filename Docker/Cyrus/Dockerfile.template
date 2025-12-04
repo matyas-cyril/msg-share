@@ -12,7 +12,7 @@ RUN apt-get update && apt-get -y upgrade && \
     apt-get install -y man-db htop db-util locate gettext-base systemctl
 
 RUN apt-get install -y --no-install-recommends iproute2 netcat-traditional telnet rlwrap lsof \
-     inetutils-ping dnsutils swaks tree rlwrap vim vim-common sasl2-bin rsyslog rsyslog-doc
+     inetutils-ping dnsutils swaks tree rlwrap vim vim-common sasl2-bin syslog-ng
 
 # Installation de Postfix
 RUN echo "postfix postfix/main_mailer_type string 'No configuration'" | debconf-set-selections && \
@@ -41,9 +41,10 @@ RUN touch /var/lib/cyrus/tls_sessions.db && chown cyrus:mail /var/lib/cyrus/tls_
 
 RUN rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/log/*
 
-COPY --chown=root:root rsyslog.conf /etc/rsyslog.conf
+COPY --chown=root:root cyrus-imapd.initd /etc/init.d/cyrus-imapd
+COPY --chown=root:root syslog-ng.conf /etc/syslog-ng/syslog-ng.conf
+COPY --chown=root:root syslog-ng.default /etc/default/syslog-ng
 
-RUN echo 'while [ 1 ]; do sleep 1 ;done;' > /loop_inf.sh && chmod +x /loop_inf.sh
+RUN echo 'service syslog-ng start; service cyrus-imapd start; service postfix start; while [ 1 ]; do sleep 1 ;done;' > /loop_inf.sh && chmod +x /loop_inf.sh
 
-CMD systemctl restart rsyslog.service && \
-    /loop_inf.sh
+CMD /loop_inf.sh
