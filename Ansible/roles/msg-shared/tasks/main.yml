@@ -1,6 +1,11 @@
-#SPDX-License-Identifier: MIT-0
 ---
 # tasks file for msg-shared
+
+- name: "Création des utilisateurs SASL"
+  import_tasks:
+    file: sasl_users.yml
+  tags:
+    - install
 
 - name: "Plateforme Cyrus Murder"
   import_tasks:
@@ -26,8 +31,3 @@
   tags:
     - install
 
-- name: "Création des utilisateurs SASL"
-  import_tasks:
-    file: sasl_users.yml
-  tags:
-    - install
