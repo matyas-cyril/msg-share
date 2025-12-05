@@ -127,8 +127,6 @@ services:
         PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: gestion  
     restart: unless-stopped
-    cap_add:
-      - SYS_PTRACE
     networks:
       msg_share_bridge:
         ipv4_address: 172.0.10.100
@@ -147,8 +145,6 @@ services:
     extra_hosts:
       - "keycloak.example.com:172.0.10.19"
     restart: unless-stopped
-    cap_add:
-      - SYS_PTRACE
     ports:
       - ${EXT_IMAP:-20143}:143
       - ${EXT_IMAPS:-20993}:993
@@ -170,8 +166,6 @@ services:
         PRIVATE_REGISTRY: ${PRIVATE_REGISTRY:-}
     hostname: smtp-postfix
     restart: unless-stopped
-    cap_add:
-      - SYS_PTRACE
     ports:
       - ${EXT_SMTP:-20025}:25
     networks:
