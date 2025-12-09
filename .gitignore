@@ -3,5 +3,8 @@
 /partage/
 dot.env
 sources
-Docker/*/Dockerfile
+Docker/Cyrus/Dockerfile
+Docker/Gestion/Dockerfile
+Docker/Postfix/Dockerfile
+Docker/Proxy-Dovecot/Dockerfile
 /keycloak-certs/
