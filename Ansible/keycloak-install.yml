@@ -21,3 +21,19 @@
       rescue:
         - debug:
             msg: "Erreur lors de l'initialisation du serveur Keycloak"
+
+- hosts: roundcube_webmail
+  gather_facts: no
+  tasks:
+    - name: "Prise en compte des certificats Keycloak dans Roundcube"
+      command: "update-ca-certificates"
+      tags:
+        - install
+
+- hosts: proxy_dovecot
+  gather_facts: no
+  tasks:
+    - name: "Prise en compte des certificats Keycloak dans Dovecot"
+      command: "update-ca-certificates"
+      tags:
+        - install

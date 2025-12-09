@@ -1,8 +1,1 @@
 ---
-- hosts: roundcube_webmail
-  gather_facts: no
-  tasks:
-    - name: "Prise en compte des certificats Keycloak dans Roundcube"
-      command: "update-ca-certificates"
-      tags:
-        - install

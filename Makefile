@@ -289,7 +289,7 @@ rm_prometheus: .init_dot.env
 	  || { $(call echo_err,"[ERROR] failed to construct docker prometheus plateform") >&2; exit 1; }
 
 .deploy_plateform: .shared_folders .init_certif-keycloak
-	@docker compose -f Docker/plateform.yml --env-file dot.env up -d --remove-orphans \
+	@docker compose -f Docker/plateform.yml --env-file dot.env  up -d --scale keycloak=0 --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker plateform") >&2; exit 1; }
 
 .install_plateform: .install_ansible .configure_ldap .install_dovecot
@@ -322,14 +322,21 @@ demo: all .add_msg_sample .add_login_sample
 	fi
 
 .deploy_keycloak: .init_certif-keycloak
+	@docker exec -i postgres psql -U messageries_root -t -c "\l" | grep -q keycloak \
+	  || { docker exec -i postgres psql -U messageries_root -c "CREATE DATABASE keycloak"; }
+
 	@docker compose -f Docker/plateform.yml --env-file dot.env up keycloak -d --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker keycloak plateform") >&2; exit 1; }
 
-.init_keycloak: .deploy_keycloak .waiting_postgres
-	@docker exec -i postgres psql -U messageries_root -t -c "\l" | grep -q keycloak \
-		|| { docker exec -i postgres psql -U messageries_root -c "CREATE DATABASE keycloak"; }
+.configure_keycloak:
+	@$(call echo_ok,"[INFO] configuring keycloak...")
+	@ANSIBLE_CONFIG=Ansible/ansible.cfg \
+	  $(VENV_DIR)/bin/ansible-playbook Ansible/keycloak-install.yml --tags install \
+	  || { $(call echo_err,"[ERROR] failed to deploy keycloak ansible") >&2; exit 1; }
 
-keycloak: .init_dot.env .init_keycloak
+.init_keycloak: .waiting_postgres .deploy_keycloak .configure_keycloak
+	
+keycloak: .init_dot.env .init_keycloak 
 	@$(call echo_ok,"[INFO] keycloak deployment completed") && exit 0;
 
 rm_keycloak: .init_dot.env
