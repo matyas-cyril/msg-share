@@ -318,10 +318,10 @@ services:
       - /etc/localtime:/etc/localtime:ro
     depends_on:
       - postgres
-#    configs:
-#      - source: adminer-index.php
-#        target: /var/www/html/index.php
-#        mode: 0755
+    configs:
+      - source: adminer-index.php
+        target: /var/www/html/index.php
+        mode: 0755
 
 configs:
   adminer-index.php:
