@@ -272,9 +272,9 @@ services:
     restart: unless-stopped
     hostname: keycloak
     extra_hosts:
-      - "roundcube.example.com:172.0.10.10"
+      - "roundcube.localhost:172.0.10.10"
     environment:
-      - KC_HOSTNAME=keycloak.example.com
+      - KC_HOSTNAME=localhost
       - KC_HOSTNAME_STRICT=false       
       - KC_BOOTSTRAP_ADMIN_USERNAME=admin
       - KC_BOOTSTRAP_ADMIN_PASSWORD=KeycloakPassword
