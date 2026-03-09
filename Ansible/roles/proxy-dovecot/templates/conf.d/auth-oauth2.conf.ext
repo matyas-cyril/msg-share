@@ -1,8 +1,3 @@
-auth_mechanisms {
-  oauthbearer = yes
-  xoauth2 = yes
-}
-
 oauth2 {
   introspection_mode = post
   # tokeninfo_url = https://keycloak.example.com:8443/realms/example.com/protocol/openid-connect/userinfo?tokentoverify=
@@ -12,14 +7,12 @@ oauth2 {
   username_attribute = email
   active_attribute = active
   active_value = true
-  # client_id = dovecot
-  # client_secret = mRS9euVEkl1wulsXU3JQPjQHrHPdDTUHa
 }
 
 
 passdb static {
   fields {
-      # user = %{u}
+      destuser = %{user|username}
       proxy=y
       # nopassword=y
       host=frontend01

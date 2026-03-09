@@ -22,7 +22,7 @@ $config['db_dsnw'] = 'pgsql://messageries_root:PasswordBdd@posgres:5432/roundcub
 // ----------------------------------
 // log driver:  'syslog', 'stdout' or 'file'.
 $config['log_driver'] = 'stdout';
-
+$config['debug_level'] = 4;
 // ----------------------------------
 // IMAP
 // ----------------------------------
