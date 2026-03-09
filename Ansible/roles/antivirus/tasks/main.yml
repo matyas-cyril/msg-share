@@ -1,2 +1,23 @@
 ---
 # tasks file for antivirus
+
+- name: "MAJ du cache apt"
+  apt:
+    update_cache: yes
+    cache_valid_time: "{{ _apt_cache_valid_time }}"
+  when:
+    _apt_update_cache | bool
+  tags:
+    - always
+
+- name: "Tâches pour Clamav"
+  include_tasks:
+    clamav.yml
+  tags:
+    - always
+
+- name: "Tâches pour Amavis"
+  include_tasks:
+    amavis.yml
+  tags:
+    - always
