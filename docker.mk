@@ -62,7 +62,7 @@ rm_backend-save: .init_dot.env
 	@docker compose -f Docker/plateform.yml --env-file dot.env up smtp_postfix* -d --remove-orphans \
 	  || { $(call echo_err,"[ERROR] failed to construct docker SMTP plateform") >&2; exit 1; }
 
-smtp: .init_dot.env .shared_folders .deploy_smtp
+deploy_smtp: .init_dot.env .shared_folders .deploy_smtp
 
 rm_smtp: .init_dot.env
 	@docker compose -f Docker/plateform.yml --env-file dot.env ps --services \
