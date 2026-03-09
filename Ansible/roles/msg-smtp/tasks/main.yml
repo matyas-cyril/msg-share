@@ -10,6 +10,14 @@
   tags:
     - install
 
+- name: "Inclure le rôle Antivirus: Clamav/Amavis"
+  include_role:
+    name: antivirus
+  when:
+    antivirus | bool
+  tags:
+    - always
+  
 - name: "Générer les fichiers pour Postfix"
   template:
     src: "{{ item.src }}"
