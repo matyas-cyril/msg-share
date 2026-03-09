@@ -1,2 +1,19 @@
 ---
 # vars file for antivirus
+
+# Définir la valeur du cache par défaut.
+# Si < 0 alors la mise à jour du cache est désactivée
+_apt_cache_valid_time: "{%- if apt_cache_valid_time is not defined -%}3600 | int {%- elif apt_cache_valid_time | int < 0 -%}{{ -1 |int }}{%- else -%}{{ apt_cache_valid_time | int }}{%- endif -%}"
+
+# Activer ou nom la MAJ de cache
+_apt_update_cache: "{%- if _apt_cache_valid_time | int < 0 -%}{{ false | bool }}{%- else -%}{{ true | bool }}{%- endif -%}"
+
+##### Freshclam
+# Définir la durée en (jour) de ala recherche des MAJ des bases de l'antivirus
+_check_database_days: "{%- if clamav_check_database_days is integer and clamav_check_database_days >= 0 -%}{{ clamav_check_database_days | int }}{%- else -%}{{ '24' | int }}{%- endif -%}"
+
+# Mirroir pour les MAJ de l'antivirus
+_clamav_private_mirror: "{%- if clamav_private_mirror is string and clamav_private_mirror | trim | length > 0 -%}{{ clamav_private_mirror | string | trim }}{%- else -%}{{ '' | string }}{%- endif -%}"
+
+# Définir la fréquence des purges de quarantaine. Par défaut on met 40 jours.
+_date_quaratine_file: "{%- if amavis_quarantine_purge is integer and amavis_quarantine_purge | int > 0 -%}{{ amavis_quarantine_purge | int }}{%- else -%}{{ '30' | int }}{%- endif -%}"
