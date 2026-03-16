@@ -73,6 +73,6 @@ demo: all .add_msg_sample .add_login_sample
 	@$(call echo_ok,"[INFO] mode demo deployment completed") && exit 0;
 #####
 
-smtp: ansible
+smtp: ansible deploy_smtp
 	ANSIBLE_CONFIG=Ansible/ansible.cfg \
 	   $(VENV_DIR)/bin/ansible-playbook Ansible/msg-smtp.yml --tags install
