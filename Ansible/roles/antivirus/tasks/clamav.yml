@@ -30,7 +30,6 @@
       - rpm2cpio
       - sleuthkit
       - tnef
-#      - unrar
       - unrar-free
       - unzip
       - zip
