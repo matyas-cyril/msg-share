@@ -14,7 +14,7 @@
   include_role:
     name: antivirus
   when:
-    antivirus | bool
+    _antivirus | bool
   tags:
     - always
   
