@@ -13,7 +13,7 @@ _apt_update_cache: "{%- if _apt_cache_valid_time | int < 0 -%}{{ false | bool }}
 _check_database_days: "{{ (clamav_check_database_days | default(24) | int) if (clamav_check_database_days is not none) else 24 }}"
 
 # Mirroir pour les MAJ de l'antivirus
-_clamav_private_mirror: "{{ (clamav_private_mirror | default('') | string).trim() }}"
+_clamav_private_mirror: "{{ (clamav_private_mirror | default('') | string | trim ) }}"
 
 # Définir la fréquence des purges de quarantaine. Par défaut on met 40 jours.
 _date_quaratine_file: "{{ (amavis_quarantine_purge | default(30) | int) }}"
