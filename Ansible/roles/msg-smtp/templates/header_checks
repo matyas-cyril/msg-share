@@ -1,0 +1,4 @@
+/filename=\"?(.*)\"?$/i   WARN
+/^Subject:/i              WARN
+/^Sender:/i               WARN 
+
