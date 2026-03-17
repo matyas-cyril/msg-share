@@ -10,10 +10,10 @@ _apt_update_cache: "{%- if _apt_cache_valid_time | int < 0 -%}{{ false | bool }}
 
 ##### Freshclam
 # Définir la durée en (jour) de ala recherche des MAJ des bases de l'antivirus
-_check_database_days: "{%- if clamav_check_database_days is integer and clamav_check_database_days >= 0 -%}{{ clamav_check_database_days | int }}{%- else -%}{{ '24' | int }}{%- endif -%}"
+_check_database_days: "{{ (clamav_check_database_days | default(24) | int) if (clamav_check_database_days is not none) else 24 }}"
 
 # Mirroir pour les MAJ de l'antivirus
-_clamav_private_mirror: "{%- if clamav_private_mirror is string and clamav_private_mirror | trim | length > 0 -%}{{ clamav_private_mirror | string | trim }}{%- else -%}{{ '' | string }}{%- endif -%}"
+_clamav_private_mirror: "{{ (clamav_private_mirror | default('') | string).trim() }}"
 
 # Définir la fréquence des purges de quarantaine. Par défaut on met 40 jours.
-_date_quaratine_file: "{%- if amavis_quarantine_purge is integer and amavis_quarantine_purge | int > 0 -%}{{ amavis_quarantine_purge | int }}{%- else -%}{{ '30' | int }}{%- endif -%}"
+_date_quaratine_file: "{{ (amavis_quarantine_purge | default(30) | int) }}"
